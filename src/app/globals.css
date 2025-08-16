@@ -1,8 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --gogo-primary: #ffad00;
+  --gogo-secondary: #00a2e1;
+  --gogo-success: #10b981;
+  --gogo-warning: #f59e0b;
+  --gogo-error: #ef4444;
 }
 
 @theme inline {
@@ -22,5 +25,10 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+/* เพิ่ม style สำหรับ html */
+html {
+  font-family: var(--font-geist-sans);
 }
