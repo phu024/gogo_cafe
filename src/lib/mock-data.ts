@@ -86,7 +86,7 @@ export const menuItems: MenuItem[] = [
         description: "Rich and bold espresso shot",
         base_price: 50,
         category_id: 1,
-        image_url: "/images/espresso.jpg",
+        image_url: "/images/espresso.png",
         is_available: true
     },
     {
@@ -95,7 +95,7 @@ export const menuItems: MenuItem[] = [
         description: "Smooth latte with steamed milk",
         base_price: 70,
         category_id: 1,
-        image_url: "/images/latte.jpg",
+        image_url: "/images/latte.png",
         is_available: true
     },
     {
@@ -104,7 +104,7 @@ export const menuItems: MenuItem[] = [
         description: "Classic cappuccino with frothy milk",
         base_price: 75,
         category_id: 1,
-        image_url: "/images/cappuccino.jpg",
+        image_url: "/images/cappuccino.png",
         is_available: true
     },
     {
@@ -113,7 +113,7 @@ export const menuItems: MenuItem[] = [
         description: "Espresso with hot water",
         base_price: 60,
         category_id: 1,
-        image_url: "/images/americano.jpg",
+        image_url: "/images/americano.png",
         is_available: true
     },
     {
@@ -122,7 +122,7 @@ export const menuItems: MenuItem[] = [
         description: "Chocolatey mocha with espresso",
         base_price: 80,
         category_id: 1,
-        image_url: "/images/mocha.jpg",
+        image_url: "/images/mocha.png",
         is_available: true
     },
 
@@ -133,7 +133,7 @@ export const menuItems: MenuItem[] = [
         description: "Refreshing green tea",
         base_price: 40,
         category_id: 2,
-        image_url: "/images/green-tea.jpg",
+        image_url: "/images/green-tea.png",
         is_available: true
     },
     {
@@ -142,7 +142,7 @@ export const menuItems: MenuItem[] = [
         description: "Strong black tea",
         base_price: 45,
         category_id: 2,
-        image_url: "/images/black-tea.jpg",
+        image_url: "/images/black-tea.png",
         is_available: true
     },
     {
@@ -151,7 +151,7 @@ export const menuItems: MenuItem[] = [
         description: "Spiced chai latte with milk",
         base_price: 65,
         category_id: 2,
-        image_url: "/images/chai-latte.jpg",
+        image_url: "/images/chai-latte.png",
         is_available: true
     },
     {
@@ -160,7 +160,7 @@ export const menuItems: MenuItem[] = [
         description: "Sweet and creamy Thai iced tea",
         base_price: 55,
         category_id: 2,
-        image_url: "/images/thai-tea.jpg",
+        image_url: "/images/thai-tea.png",
         is_available: true
     },
 
@@ -171,7 +171,7 @@ export const menuItems: MenuItem[] = [
         description: "Creamy mango smoothie",
         base_price: 90,
         category_id: 3,
-        image_url: "/images/mango-smoothie.jpg",
+        image_url: "/images/mango-smoothie.png",
         is_available: true
     },
     {
@@ -180,7 +180,7 @@ export const menuItems: MenuItem[] = [
         description: "Mixed berry smoothie",
         base_price: 95,
         category_id: 3,
-        image_url: "/images/berry-smoothie.jpg",
+        image_url: "/images/berry-smoothie.png",
         is_available: true
     },
     {
@@ -189,7 +189,7 @@ export const menuItems: MenuItem[] = [
         description: "Banana and yogurt smoothie",
         base_price: 85,
         category_id: 3,
-        image_url: "/images/banana-smoothie.jpg",
+        image_url: "/images/banana-smoothie.png",
         is_available: true
     },
     {
@@ -198,7 +198,7 @@ export const menuItems: MenuItem[] = [
         description: "Tropical pineapple smoothie",
         base_price: 90,
         category_id: 3,
-        image_url: "/images/pineapple-smoothie.jpg",
+        image_url: "/images/pineapple-smoothie.png",
         is_available: true
     }
 ]
