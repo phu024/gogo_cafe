@@ -38,7 +38,7 @@ export function useBaristaOrders(initialOrders: Order[], options?: UseBaristaOrd
   const [searchText, setSearchText] = useState('');
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [dateRange, setDateRange] = useState<[Dayjs, Dayjs] | null>(null);
-  const [activeTab, setActiveTab] = useState<OrderStatus>('PENDING');
+  const [activeTab, setActiveTab] = useState<string>("all");
 
   // Initialize date range to today on first load
   useEffect(() => {
