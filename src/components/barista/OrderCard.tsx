@@ -1,6 +1,6 @@
 // filepath: g:\Train\Test\gogo_cafe\src\components\barista\OrderCard.tsx
 import React, { useMemo } from 'react';
-import { Card, Button } from 'antd';
+import { Card, Button, Badge as AntdBadge } from 'antd';
 import { FileTextOutlined } from '@ant-design/icons';
 import type { Order, OrderStatus } from '@/types';
 import type { StatusViewConfig } from '@/hooks/useBaristaOrders';
@@ -47,6 +47,20 @@ export const OrderCard: React.FC<OrderCardProps> = React.memo(({
       hiddenCount: Math.max(0, lines.length - MAX_ITEMS_TO_SHOW)
     };
   }, [order.items, isExpanded]);
+
+  // BADGE LOGIC
+  const now = dayjs();
+  const orderTime = dayjs(order.order_time);
+  const completed = order.order_status === "COMPLETED";
+  const ready = order.order_status === "READY";
+  const minutesElapsed = now.diff(orderTime, "minute");
+  let badgeType: "new" | "urgent" | "late" | null = null;
+  if (!completed && !ready) {
+    if (minutesElapsed < 1) badgeType = "new";
+    else if (minutesElapsed < 5) badgeType = "urgent";
+    else if (minutesElapsed > 15) badgeType = "late";
+  }
+
   return (
     <Card
       size="small"
@@ -63,6 +77,16 @@ export const OrderCard: React.FC<OrderCardProps> = React.memo(({
               <span className="text-base font-semibold text-gray-800">#{order.id}</span>
               <span className="text-gray-500">•</span>
               <span className="text-sm text-gray-500">{elapsed}</span>
+              {/* BADGE DISPLAY */}
+              {badgeType === "new" && (
+                <AntdBadge count="งานใหม่" style={{ backgroundColor: '#22c55e', color: '#fff', fontWeight: 500 }} />
+              )}
+              {badgeType === "urgent" && (
+                <AntdBadge count="เร่งด่วน" style={{ backgroundColor: '#f59e42', color: '#fff', fontWeight: 500 }} />
+              )}
+              {badgeType === "late" && (
+                <AntdBadge count="เกินเวลา!" style={{ backgroundColor: '#ef4444', color: '#fff', fontWeight: 500 }} />
+              )}
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-xs text-gray-400">

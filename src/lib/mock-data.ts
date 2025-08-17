@@ -242,6 +242,8 @@ export const toppings: Topping[] = [
     }
 ];
 
+const now = new Date();
+
 export const sampleOrders: Order[] = [
     {
         //  2 COMPLETED order
@@ -526,7 +528,46 @@ export const sampleOrders: Order[] = [
                 total_price: 55
             }
         ]
-    }
+    },
+
+    // BADGE DEMO ORDERS
+
+    {
+        id: "GOGO-240115-011",
+        User: users[2],
+        total_amount: 60,
+        order_status: "PENDING",
+        payment_method: "CASH",
+        payment_status: "PENDING",
+        order_time: new Date(now.getTime() - 16 * 60 * 1000), // 16 minutes ago
+        items: [
+            { id: 102, menu_item: menuItems[2], toppings: [], quantity: 1, total_price: 60 }
+        ]
+    },
+    {
+        id: "GOGO-240115-012",
+        User: users[1],
+        total_amount: 45,
+        order_status: "PENDING",
+        payment_method: "CASH",
+        payment_status: "PENDING",
+        order_time: new Date(now.getTime() - 4 * 60 * 1000), // 4 minutes ago
+        items: [
+            { id: 101, menu_item: menuItems[1], toppings: [], quantity: 1, total_price: 45 }
+        ]
+    },
+    {
+        id: "GOGO-240115-013",
+        User: users[0],
+        total_amount: 50,
+        order_status: "PENDING",
+        payment_method: "CASH",
+        payment_status: "PENDING",
+        order_time: new Date(now.getTime() - 30 * 1000), // 30 seconds ago
+        items: [
+            { id: 100, menu_item: menuItems[0], toppings: [], quantity: 1, total_price: 50 }
+        ]
+    },
 ];
 
 
