@@ -253,7 +253,7 @@ export const sampleOrders: Order[] = [
         payment_status: "COMPLETED",    
         order_time: new Date("2024-01-15T10:00:00Z"),
         completed_time: new Date("2024-01-15T10:15:00Z"),
-        notes: "ชง濃หน่อย / Extra strong",
+        notes: "ขอเข้ม ๆ",
         items: [
             {
                 id: 1,

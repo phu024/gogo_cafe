@@ -49,7 +49,6 @@ const BaristaPage: React.FC = () => {
     toggleExpand,
     dateRange,
     setDateRange,
-    allActive,
     byStatus,
     updateStatus,
     getStatusView,
@@ -58,7 +57,6 @@ const BaristaPage: React.FC = () => {
     resetFilters,
     activeTab,
     setActiveTab,
-    orders, // <-- เพิ่มตรงนี้
   } = useBaristaOrders(sampleOrders, { persistKey: "baristaOrders" });
 
   // Tab configuration helper
@@ -118,25 +116,30 @@ const BaristaPage: React.FC = () => {
       setDateRange(null);
     }
   };
+  const allTabOrders = byStatus("PENDING")
+    .concat(byStatus("IN_PROGRESS"))
+    .concat(byStatus("READY"))
+    .concat(byStatus("COMPLETED"));
 
-  // Create tab items
+  const allTabFiltered = allTabOrders.filter(order => order.order_status !== "UN_PAYMENT" && order.order_status !== "CANCELED");
+
   const allOrdersTab = {
     key: "all",
     label: (
       <span className="flex items-center gap-2">
         ทั้งหมด
-        <Badge count={orders.filter(order => order.order_status !== "UN_PAYMENT" && order.order_status !== "CANCELED").length} />
+        <Badge count={allTabFiltered.length} />
       </span>
     ),
     children: (
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {orders.filter(order => order.order_status !== "UN_PAYMENT" && order.order_status !== "CANCELED").length === 0 ? (
+        {allTabFiltered.length === 0 ? (
           <Empty
             description="ไม่มีรายการที่ต้องดำเนินการ"
             className="col-span-full"
           />
         ) : (
-          orders.filter(order => order.order_status !== "UN_PAYMENT" && order.order_status !== "CANCELED").map((order) => {
+          allTabFiltered.map((order) => {
             const nextAction = getNextAction(order);
             return (
               <OrderCard
@@ -157,6 +160,7 @@ const BaristaPage: React.FC = () => {
       </div>
     ),
   };
+
   const statusTabs = TABBED_STATUSES.map((status) => {
     let emptyMessage;
     switch (status) {
