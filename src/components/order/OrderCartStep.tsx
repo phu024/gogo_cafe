@@ -74,24 +74,26 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
   }
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-5xl mx-auto">
       {/* Header Section */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 mb-8">
-        <div className="flex items-center justify-between">
+      <div className="bg-gradient-to-r from-blue-100 to-indigo-100 rounded-2xl p-8 mb-8 shadow-md flex items-center justify-between">
+        <div className="flex items-center gap-4">
           <div>
-            <Title level={2} className="mb-2 text-gray-800">
-              🛒 ตะกร้าสินค้า
+            
+            <Title level={2} className="mb-1 text-gray-900">
+              <ShoppingCartOutlined className="text-4xl text-blue-500 mr-4" />
+              ตะกร้าสินค้าของคุณ
             </Title>
-            <Paragraph className="text-gray-600 mb-0 text-lg">
-              ตรวจสอบรายการและดำเนินการสั่งซื้อ
+            <Paragraph className="text-gray-600 text-base mb-0">
+              ตรวจสอบรายการก่อนสั่งซื้อ หากต้องการแก้ไขสามารถปรับจำนวนหรือลบรายการได้ทันที
             </Paragraph>
           </div>
-          <Badge count={getTotalItems()} className="cart-badge">
-            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
-              <ShoppingCartOutlined className="text-2xl text-blue-600" />
-            </div>
-          </Badge>
         </div>
+        <Badge count={getTotalItems()} className="cart-badge">
+          <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
+            <ShoppingCartOutlined className="text-2xl text-blue-600" />
+          </div>
+        </Badge>
       </div>
 
       {/* Cart Items Section */}
@@ -99,44 +101,41 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
         {cart.map((item) => (
           <Card
             key={item.id}
-            className="shadow-sm hover:shadow-md transition-shadow duration-200 border-0 bg-white"
+            className="shadow-md border-0 bg-gradient-to-r from-white to-blue-50 hover:scale-[1.01] transition-transform duration-150"
             style={{ marginBottom: "16px" }}
           >
-            <Row align="middle" gutter={24} className="justify-between px-10">
+            <Row align="middle" gutter={24} className="justify-between px-6">
               {/* Item Details */}
               <Col span={12}>
-                <div className="space-y-3">
-                  <div>
-                    <Title level={4} className="mb-1 text-gray-800">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <CoffeeOutlined className="text-xl text-emerald-500" />
+                    <Title level={4} className="mb-0 text-gray-800">
                       {item.menu_item.name}
                     </Title>
-                    <Text className="text-gray-500">
-                      {item.menu_item.description}
-                    </Text>
                   </div>
-
+                  <Text className="text-gray-500 text-sm">
+                    {item.menu_item.description}
+                  </Text>
                   {/* Toppings */}
                   {item.toppings.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2 mt-1">
                       {item.toppings.map((topping) => (
-                        <div
+                        <Tag
                           key={topping.id}
-                          className="bg-blue-50 text-blue-700 border-blue-200 px-3 py-1 rounded-full"
-                          style={{ display: "inline-block" }}
+                          color="blue"
+                          className="rounded-full px-3 py-1 text-sm"
                         >
-                          <Tag style={{ background: "transparent", border: "none", color: "inherit", padding: 0, margin: 0 }}>
-                            ✨ {topping.name}
-                          </Tag>
-                        </div>
+                          ✨ {topping.name}
+                        </Tag>
                       ))}
                     </div>
                   )}
-
                   {/* Notes */}
                   {item.notes && (
-                    <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded-r-lg">
-                      <Text className="text-yellow-800 text-sm">
-                        📝 {item.notes}
+                    <div className="bg-yellow-50 border-l-4 border-yellow-400 p-2 rounded-r-lg mt-1">
+                      <Text className="text-yellow-800 text-xs">
+                        📝 หมายเหตุ: {item.notes}
                       </Text>
                     </div>
                   )}
@@ -146,19 +145,29 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
               {/* Quantity Controls */}
               <Col span={4}>
                 <div className="flex flex-col items-center space-y-2">
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-2">
+                    <Button
+                      icon={<MinusOutlined />}
+                      size="small"
+                      onClick={() => onQuantityUpdate(item.id, Math.max(1, item.quantity - 1))}
+                      className="border-gray-300"
+                    />
                     <InputNumber
                       min={1}
                       value={item.quantity}
-                      onChange={(value) =>
-                        onQuantityUpdate(item.id, value || 1)
-                      }
+                      onChange={(value) => onQuantityUpdate(item.id, value || 1)}
                       size="small"
-                      style={{ width: 60, textAlign: "center" }}
+                      style={{ width: 50, textAlign: "center" }}
                       className="text-center"
                     />
+                    <Button
+                      icon={<PlusOutlined />}
+                      size="small"
+                      onClick={() => onQuantityUpdate(item.id, item.quantity + 1)}
+                      className="border-gray-300"
+                    />
                   </div>
-                  <Text className="text-gray-500 text-sm">
+                  <Text className="text-gray-500 text-xs">
                     ฿{Math.round(item.total_price / item.quantity)}/ชิ้น
                   </Text>
                 </div>
@@ -167,8 +176,8 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
               {/* Price */}
               <Col span={3}>
                 <div className="text-right">
-                  <Text strong className="text-xl">
-                    ฿{item.total_price}
+                  <Text strong className="text-xl text-green-700">
+                    ฿{item.total_price.toLocaleString()}
                   </Text>
                 </div>
               </Col>
@@ -182,6 +191,7 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
                   onClick={() => onRemoveItem(item.id)}
                   className="hover:bg-red-50"
                   size="large"
+                  title="ลบรายการนี้"
                 />
               </Col>
             </Row>
@@ -190,40 +200,37 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
       </div>
 
       {/* Summary Section */}
-      <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-0 shadow-lg">
+      <Card className="bg-gradient-to-r from-green-50 to-emerald-100 border-0 shadow-xl mt-6">
         <div className="text-center">
-          <div className="flex items-center justify-center space-x-4 ">
-
-            <div>
-              <Title level={2} className="mb-1 text-gray-800">
-                ยอดรวมทั้งหมด
-              </Title>
-           
-            </div>
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <Title level={3} className="mb-0 text-gray-800">
+              ยอดรวมสุทธิ
+            </Title>
           </div>
-
-          <Title level={1} className="text-green-600 mb-8">
+          <Title level={1} className="text-green-600 mb-6">
             ฿{getTotalAmount().toLocaleString()}
           </Title>
         </div>
         <div className="flex justify-end gap-4">
-            <Button
-              onClick={onBackToMenu}
-              size="large"
-              className="h-12 px-8 text-lg border-gray-300"
-            >
-              เลือกเมนูเพิ่ม
-            </Button>
-            <Button
-              type="primary"
-              size="large"
-              onClick={onCheckout}
-              disabled={cart.length === 0}
-              className="h-12 px-8 text-lg"
-            >
-              ดำเนินการสั่งซื้อ
-            </Button>
-          </div>
+          <Button
+            onClick={onBackToMenu}
+            size="large"
+            className="h-12 px-8 text-lg border-gray-300 bg-white hover:bg-green-50"
+            icon={<ArrowLeftOutlined />}
+          >
+            กลับไปเลือกเมนู
+          </Button>
+          <Button
+            type="primary"
+            size="large"
+            onClick={onCheckout}
+            disabled={cart.length === 0}
+            className="h-12 px-8 text-lg bg-gradient-to-r from-emerald-400 to-green-500 border-0"
+            icon={<ShoppingCartOutlined />}
+          >
+            ยืนยันการสั่งซื้อ
+          </Button>
+        </div>
       </Card>
     </div>
   );
