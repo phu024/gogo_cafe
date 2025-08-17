@@ -120,7 +120,7 @@ export const OrderCard: React.FC<OrderCardProps> = React.memo(({
             <Button
               type="primary"
               size="middle"
-              style={{ background: nextAction.color, borderColor: nextAction.color }}
+              style={{ background: statusView.color, borderColor: statusView.color }}
               className="w-full font-medium shadow-sm hover:opacity-90"
               onClick={() => onAdvance(order.id, nextAction.to)}
             >

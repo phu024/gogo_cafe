@@ -50,7 +50,7 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatus, OrderStatusConfigItem> = {
     showInTabs: true,  
     active: true,
     next: ORDER_WORKFLOW['IN_PROGRESS'],
-    nextAction: 'ดำเนินการเสร็จแล้ว',
+    nextAction: 'ดำเนินการเสร็จสิ้น',
     description: 'Order is being prepared by barista'
   },
   READY: { 
@@ -61,7 +61,7 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatus, OrderStatusConfigItem> = {
     showInTabs: true,  
     active: true,
     next: ORDER_WORKFLOW['READY'],
-    nextAction: 'ลูกค้ารับแล้ว',
+    nextAction: 'ส่งมอบให้ลูกค้า',
     description: 'Order is ready for pickup'
   },
   COMPLETED: { 

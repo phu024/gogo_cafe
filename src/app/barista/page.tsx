@@ -58,6 +58,7 @@ const BaristaPage: React.FC = () => {
     resetFilters,
     activeTab,
     setActiveTab,
+    orders, // <-- เพิ่มตรงนี้
   } = useBaristaOrders(sampleOrders, { persistKey: "baristaOrders" });
 
   // Tab configuration helper
@@ -124,18 +125,18 @@ const BaristaPage: React.FC = () => {
     label: (
       <span className="flex items-center gap-2">
         ทั้งหมด
-        <Badge count={allActive().length} />
+        <Badge count={orders.filter(order => order.order_status !== "UN_PAYMENT" && order.order_status !== "CANCELED").length} />
       </span>
     ),
     children: (
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {allActive().length === 0 ? (
+        {orders.filter(order => order.order_status !== "UN_PAYMENT" && order.order_status !== "CANCELED").length === 0 ? (
           <Empty
             description="ไม่มีรายการที่ต้องดำเนินการ"
             className="col-span-full"
           />
         ) : (
-          allActive().map((order) => {
+          orders.filter(order => order.order_status !== "UN_PAYMENT" && order.order_status !== "CANCELED").map((order) => {
             const nextAction = getNextAction(order);
             return (
               <OrderCard
