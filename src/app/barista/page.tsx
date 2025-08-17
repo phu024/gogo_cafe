@@ -39,6 +39,7 @@ const TABBED_STATUSES: OrderStatus[] = [
   "IN_PROGRESS",
   "READY",
   "COMPLETED",
+  "CANCELED",
 ];
 
 const BaristaPage: React.FC = () => {
@@ -192,6 +193,9 @@ const BaristaPage: React.FC = () => {
         break;
       case "COMPLETED":
         emptyMessage = "ไม่มีรายการที่ส่งมอบแล้ว";
+        break;
+      case "CANCELED":
+        emptyMessage = "ไม่มีรายการที่ถูกยกเลิก";
         break;
       default:
         emptyMessage = "ไม่มีรายการ";
