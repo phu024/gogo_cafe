@@ -4,6 +4,7 @@ import { Card, Button } from 'antd';
 import { FileTextOutlined } from '@ant-design/icons';
 import type { Order, OrderStatus } from '@/types';
 import type { StatusViewConfig } from '@/hooks/useBaristaOrders';
+import dayjs from 'dayjs';
 
 export interface NextAction {
   to: OrderStatus;
@@ -63,15 +64,20 @@ export const OrderCard: React.FC<OrderCardProps> = React.memo(({
               <span className="text-gray-500">•</span>
               <span className="text-sm text-gray-500">{elapsed}</span>
             </div>
-            <div className="flex flex-wrap gap-2 items-center">
-              <span className="font-medium text-sm">{order.User.first_name} {order.User.last_name}</span>
-              <span
-                className="text-xs font-medium px-2 py-1 rounded-full flex items-center gap-1.5"
-                style={{ background: `${statusView.color}15`, color: statusView.color }}
-              >
-                {statusView.icon}
-                {statusView.text}
+            <div className="flex flex-col gap-1">
+              <span className="text-xs text-gray-400">
+                สั่งเมื่อ: {order.order_time ? dayjs(order.order_time).format('DD/MM/YYYY HH:mm') : '-'}
               </span>
+              <div className="flex flex-wrap gap-2 items-center">
+                <span className="font-medium text-sm">{order.User.first_name} {order.User.last_name}</span>
+                <span
+                  className="text-xs font-medium px-2 py-1 rounded-full flex items-center gap-1.5"
+                  style={{ background: `${statusView.color}15`, color: statusView.color }}
+                >
+                  {statusView.icon}
+                  {statusView.text}
+                </span>
+              </div>
             </div>
           </div>
         </div>        
