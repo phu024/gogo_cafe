@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Typography,
-  Card,
-  Row,
-  Col,
-  Button,
-  InputNumber,
-  Tag,
-  Badge,
-} from "antd";
+import { Typography, Row, Col, Button, InputNumber, Tag, Badge, Divider } from "antd";
 import {
   CoffeeOutlined,
   PlusOutlined,
@@ -79,13 +70,13 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
       <div className="bg-gradient-to-r from-blue-100 to-indigo-100 rounded-2xl p-8 mb-8 shadow-md flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div>
-            
             <Title level={2} className="mb-1 text-gray-900">
               <ShoppingCartOutlined className="text-4xl text-blue-500 mr-4" />
               ตะกร้าสินค้าของคุณ
             </Title>
             <Paragraph className="text-gray-600 text-base mb-0">
-              ตรวจสอบรายการก่อนสั่งซื้อ หากต้องการแก้ไขสามารถปรับจำนวนหรือลบรายการได้ทันที
+              ตรวจสอบรายการก่อนสั่งซื้อ
+              หากต้องการแก้ไขสามารถปรับจำนวนหรือลบรายการได้ทันที
             </Paragraph>
           </div>
         </div>
@@ -94,17 +85,16 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
             <ShoppingCartOutlined className="text-2xl text-blue-600" />
           </div>
         </Badge>
-      </div>
-
+      </div>{" "}
       {/* Cart Items Section */}
       <div className="space-y-4 mb-8">
         {cart.map((item) => (
-          <Card
+          <div
             key={item.id}
-            className="shadow-md border-0 bg-gradient-to-r from-white to-blue-50 hover:scale-[1.01] transition-transform duration-150"
-            style={{ marginBottom: "16px" }}
+            // className="bg-gradient-to-r from-white to-blue-50 hover:scale-[1.01] transition-transform duration-150 shadow-md rounded-xl p-6 mb-4 border border-gray-100"
+            className=" hover:bg-gray-50 transition-colors duration-150  mb-4 pr-16"
           >
-            <Row align="middle" gutter={24} className="justify-between px-6">
+            <Row align="middle" gutter={24} className="justify-between">
               {/* Item Details */}
               <Col span={12}>
                 <div className="space-y-2">
@@ -149,13 +139,20 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
                     <Button
                       icon={<MinusOutlined />}
                       size="small"
-                      onClick={() => onQuantityUpdate(item.id, Math.max(1, item.quantity - 1))}
+                      onClick={() =>
+                        onQuantityUpdate(
+                          item.id,
+                          Math.max(1, item.quantity - 1)
+                        )
+                      }
                       className="border-gray-300"
                     />
                     <InputNumber
                       min={1}
                       value={item.quantity}
-                      onChange={(value) => onQuantityUpdate(item.id, value || 1)}
+                      onChange={(value) =>
+                        onQuantityUpdate(item.id, value || 1)
+                      }
                       size="small"
                       style={{ width: 50, textAlign: "center" }}
                       className="text-center"
@@ -163,7 +160,9 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
                     <Button
                       icon={<PlusOutlined />}
                       size="small"
-                      onClick={() => onQuantityUpdate(item.id, item.quantity + 1)}
+                      onClick={() =>
+                        onQuantityUpdate(item.id, item.quantity + 1)
+                      }
                       className="border-gray-300"
                     />
                   </div>
@@ -195,43 +194,70 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
                 />
               </Col>
             </Row>
-          </Card>
+          </div>
         ))}
       </div>
-
       {/* Summary Section */}
-      <Card className="bg-gradient-to-r from-green-50 to-emerald-100 border-0 shadow-xl mt-6">
-        <div className="text-center">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <Title level={3} className="mb-0 text-gray-800">
-              ยอดรวมสุทธิ
+      <Divider className="mb-2" />
+
+      {/* <Card className="bg-gradient-to-r from-green-50 to-emerald-100 border-0 shadow-xl mt-6">
+    
+      </Card> */}
+      
+      <div
+      // className="bg-white rounded-lg shadow-md p-6 mb-8"
+      >
+        <Row justify="space-between" align="middle">
+          <Col>
+            <Title level={4} className="mb-0 text-gray-800">
+              สรุปรายการสั่งซื้อ
             </Title>
-          </div>
-          <Title level={1} className="text-green-600 mb-6">
-            ฿{getTotalAmount().toLocaleString()}
-          </Title>
-        </div>
-        <div className="flex justify-end gap-4">
-          <Button
-            onClick={onBackToMenu}
-            size="large"
-            className="h-12 px-8 text-lg border-gray-300 bg-white hover:bg-green-50"
-            icon={<ArrowLeftOutlined />}
-          >
-            กลับไปเลือกเมนู
-          </Button>
+          </Col>
+          <Col>
+            <Text className="text-gray-600">
+              จำนวนรายการ: {getTotalItems()} ชิ้น
+            </Text>
+          </Col>
+        </Row>
+        <Row justify="space-between" align="middle" className="mt-4">
+          <Col>
+            <Text className="text-gray-500">ยอดรวมทั้งหมด</Text>
+          </Col>
+          <Col>
+            <Text strong className="text-xl text-green-700">
+              ฿{getTotalAmount().toLocaleString()}
+            </Text>
+          </Col>
+        </Row>
+
+        {/* Checkout Button */}
+        <div className="mt-6 text-right">
+
+            <div className="inline-block border border-gray-300 rounded-lg mr-4 bg-gray-50">
+            <Button
+              type="text"
+              icon={<ArrowLeftOutlined />}
+              size="large"
+              onClick={onBackToMenu}
+              className="text-gray-600 hover:text-gray-800 rounded-lg"
+            >
+              กลับไปเลือกเมนู
+            </Button>
+            </div>
+  
+  
           <Button
             type="primary"
             size="large"
-            onClick={onCheckout}
-            disabled={cart.length === 0}
-            className="h-12 px-8 text-lg bg-gradient-to-r from-emerald-400 to-green-500 border-0"
             icon={<ShoppingCartOutlined />}
+            onClick={onCheckout}
+            className="h-12 px-8"
           >
-            ยืนยันการสั่งซื้อ
+            ดำเนินการชำระเงิน
           </Button>
         </div>
-      </Card>
+
+      </div>
     </div>
   );
 };

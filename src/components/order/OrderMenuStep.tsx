@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Card, Row, Col, Button, Space, Divider } from 'antd';
+import { Typography, Card, Row, Col, Button, Space, Divider, Tag } from 'antd';
 import { CoffeeOutlined, PlusOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { MenuCategory, MenuItem } from '@/types';
 
@@ -62,14 +62,15 @@ const OrderMenuStep: React.FC<OrderMenuStepProps> = ({
           <Col xs={24} sm={12} md={8} lg={6} key={item.id}>
             <Card
               hoverable
+              className={!item.is_available ? 'opacity-70' : ''}
               cover={
                 item.image_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img 
                     alt={item.name}
                     src={item.image_url}
                     className="h-48 w-full object-cover"
                     onError={(e) => {
-                      // ถ้ารูปไม่โหลดได้ ให้แสดงไอคอนแทน
                       const target = e.target as HTMLImageElement;
                       target.style.display = 'none';
                       const parent = target.parentElement;
@@ -90,29 +91,31 @@ const OrderMenuStep: React.FC<OrderMenuStepProps> = ({
                   </div>
                 )
               }
-              actions={[
-                <Button 
-                  type="primary" 
-                  icon={<PlusOutlined />}
-                  onClick={() => onItemSelect(item)}
-                >
-                  เพิ่มลงตะกร้า
-                </Button>
-              ]}
             >
-              <Card.Meta
-                title={item.name}
-                description={
-                  <div>
-                    <Paragraph className="text-gray-600 mb-2">
-                      {item.description}
-                    </Paragraph>
-                    <Text strong className="text-lg text-green-600">
-                      ฿{item.base_price}
-                    </Text>
-                  </div>
-                }
-              />
+              <div>
+                <div className="flex justify-between items-start mb-2">
+                  <Text strong className="text-lg">{item.name}</Text>
+                  <Tag color={item.is_available ? 'success' : 'error'}>
+                    {item.is_available ? 'พร้อมขาย' : 'หมด'}
+                  </Tag>
+                </div>
+                <Paragraph className="text-gray-600 text-sm mb-2 min-h-[40px]">
+                  {item.description}
+                </Paragraph>
+                <div className="flex justify-between items-center">
+                  <Text className="text-lg font-semibold text-green-600">
+                    ฿{item.base_price}
+                  </Text>
+                  <Button 
+                    type="primary" 
+                    icon={<PlusOutlined />}
+                    onClick={() => onItemSelect(item)}
+                    disabled={!item.is_available}
+                  >
+                    เพิ่มลงตะกร้า
+                  </Button>
+                </div>
+              </div>
             </Card>
           </Col>
         ))}

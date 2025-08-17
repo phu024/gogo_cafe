@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { users } from '@/lib/mock-data';
 import { useRouter } from 'next/navigation';
+import { Select, Button } from 'antd';
+import 'antd/dist/reset.css';
 
 export default function LandingPage() {
   const router = useRouter();
@@ -26,33 +28,36 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-yellow-50 via-white to-blue-50 p-6">
-      <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+      <div className="w-full max-w-xl bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
         <h1 className="text-3xl font-bold mb-6 text-center"><span style={{color:"var(--gogo-primary)"}}>GOGO</span> <span style={{color:"var(--gogo-secondary)"}}>CAFE</span></h1>
         <p className="text-center text-gray-600 mb-4">เลือกผู้ใช้เพื่อจำลองการเข้าสู่ระบบ (mock)</p>
 
         <div className="flex items-center gap-3">
-          <select
-            value={selectedUserId ?? ''}
-            onChange={(e) => setSelectedUserId(e.target.value ? Number(e.target.value) : null)}
-            className="flex-1 border rounded-md px-3 py-2"
-          >
-            <option value="">-- เลือกผู้ใช้ --</option>
-            {users.map(u => (
-              <option key={u.id} value={u.id}>{u.first_name} {u.last_name} — {u.role_id.name}</option>
-            ))}
-          </select>
-
-          <button
+          <Select
+            className="w-full"
+            placeholder="-- เลือกผู้ใช้ --"
+            value={selectedUserId ?? undefined}
+            onChange={(value) => setSelectedUserId(value)}
+            options={users.map(u => ({
+              label: `${u.first_name} ${u.last_name} — ${u.role_id.name}`,
+              value: u.id
+            }))}
+            style={{ minWidth: 220 }}
+          />
+        </div>
+        <div className="mt-6 flex justify-center">
+          <Button
+            type="primary"
             onClick={handleLogin}
-            className="px-4 py-2 rounded-md bg-yellow-500 hover:bg-yellow-600 text-white disabled:opacity-50"
             disabled={!selectedUserId}
+            style={{ background: '#facc15', borderColor: '#facc15', width: '100%' }}
           >
             เข้าสู่ระบบ
-          </button>
+          </Button>
         </div>
 
         <div className="mt-6 text-sm text-gray-400 text-center">
-          <p>หมายเหตุ: นี่เป็น mock-login สำหรับการพัฒนาเท่านั้น</p>
+          <p>หมายเหตุ: mock-login สำหรับการพัฒนาเท่านั้น</p>
         </div>
       </div>
     </div>

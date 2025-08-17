@@ -5,23 +5,28 @@ import { ShoppingCartOutlined } from '@ant-design/icons';
 interface CartBadgeProps {
   cartCount: number;
   onCartClick: () => void;
+  className?: string;
 }
 
-const CartBadge: React.FC<CartBadgeProps> = ({ cartCount, onCartClick }) => {
-  return (
-    <div className="text-right mb-6">
-      <Badge count={cartCount} showZero={false}>
-        <Button 
-          type="primary" 
-          icon={<ShoppingCartOutlined />}
-          size="large"
-          onClick={onCartClick}
-        >
-          ตะกร้า ({cartCount})
-        </Button>
-      </Badge>
-    </div>
-  );
-};
+const CartBadge: React.FC<CartBadgeProps> = ({ 
+  cartCount, 
+  onCartClick, 
+  className = 'text-right my-4' 
+}) => (
+  <div className={className}>
+    <Badge count={cartCount} showZero={false}>
+      <Button 
+        type="primary" 
+        icon={<ShoppingCartOutlined />}
+        size="large"
+        onClick={onCartClick}
+        className="min-w-[120px]"
+        aria-label={`ตะกร้า (${cartCount} รายการ)`}
+      >
+        ตะกร้า ({cartCount})
+      </Button>
+    </Badge>
+  </div>
+);
 
 export default CartBadge;
