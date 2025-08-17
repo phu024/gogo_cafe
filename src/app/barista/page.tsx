@@ -121,7 +121,24 @@ const BaristaPage: React.FC = () => {
     .concat(byStatus("READY"))
     .concat(byStatus("COMPLETED"));
 
-  const allTabFiltered = allTabOrders.filter(order => order.order_status !== "UN_PAYMENT" && order.order_status !== "CANCELED");
+  const statusOrder = {
+    PENDING: 1,
+    IN_PROGRESS: 2,
+    READY: 3,
+    COMPLETED: 4,
+  } as const;
+
+  const allTabFiltered = allTabOrders
+    .filter(order => order.order_status !== "UN_PAYMENT" && order.order_status !== "CANCELED")
+    .sort((a, b) => {
+      // เฉพาะสถานะที่อยู่ใน statusOrder เท่านั้น
+      const aStatus = statusOrder[a.order_status as keyof typeof statusOrder] ?? 99;
+      const bStatus = statusOrder[b.order_status as keyof typeof statusOrder] ?? 99;
+      if (aStatus !== bStatus) {
+        return aStatus - bStatus;
+      }
+      return new Date(a.order_time).getTime() - new Date(b.order_time).getTime();
+    });
 
   const allOrdersTab = {
     key: "all",
