@@ -15,11 +15,11 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --background: #f0f4f8;
+  --foreground: #333;
+  --font-geist-sans: 'Geist Sans', Arial, Helvetica, sans-serif;
+  --font-geist-mono: 'Geist Mono', monospace;
 }
 
 body {
@@ -28,7 +28,7 @@ body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
-/* เพิ่ม style สำหรับ html */
+
 html {
   font-family: var(--font-geist-sans);
 }

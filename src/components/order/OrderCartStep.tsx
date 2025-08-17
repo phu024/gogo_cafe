@@ -1,7 +1,23 @@
-import React from 'react';
-import { Typography, Card, Row, Col, Button, InputNumber, Tag, Badge } from 'antd';
-import { CoffeeOutlined, PlusOutlined, MinusOutlined, DeleteOutlined, ShoppingCartOutlined, ArrowLeftOutlined } from '@ant-design/icons';
-import { CartItem } from '@/types';
+import React from "react";
+import {
+  Typography,
+  Card,
+  Row,
+  Col,
+  Button,
+  InputNumber,
+  Tag,
+  Badge,
+} from "antd";
+import {
+  CoffeeOutlined,
+  PlusOutlined,
+  MinusOutlined,
+  DeleteOutlined,
+  ShoppingCartOutlined,
+  ArrowLeftOutlined,
+} from "@ant-design/icons";
+import { CartItem } from "@/types";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -35,14 +51,17 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
           <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <ShoppingCartOutlined className="text-4xl text-gray-400" />
           </div>
-          <Title level={2} className="mb-4 text-gray-600">ตะกร้าว่างเปล่า</Title>
+          <Title level={2} className="mb-4 text-gray-600">
+            ตะกร้าว่างเปล่า
+          </Title>
           <Paragraph className="text-gray-500 mb-8 text-lg">
-            ยังไม่มีรายการในตะกร้า<br />
+            ยังไม่มีรายการในตะกร้า
+            <br />
             เริ่มต้นเลือกเมนูเครื่องดื่มของคุณ
           </Paragraph>
-          <Button 
-            type="primary" 
-            size="large" 
+          <Button
+            type="primary"
+            size="large"
             icon={<CoffeeOutlined />}
             onClick={onBackToMenu}
             className="h-12 px-8 text-lg"
@@ -78,19 +97,12 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
       {/* Cart Items Section */}
       <div className="space-y-4 mb-8">
         {cart.map((item) => (
-          <Card 
-            key={item.id} 
+          <Card
+            key={item.id}
             className="shadow-sm hover:shadow-md transition-shadow duration-200 border-0 bg-white"
-            bodyStyle={{ padding: '24px' }}
+            style={{ marginBottom: "16px" }}
           >
-            <Row align="middle" gutter={24}>
-              {/* Item Image */}
-              <Col span={4}>
-                <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-red-100 rounded-xl flex items-center justify-center">
-                  <CoffeeOutlined className="text-3xl text-orange-500" />
-                </div>
-              </Col>
-
+            <Row align="middle" gutter={24} className="justify-between px-10">
               {/* Item Details */}
               <Col span={12}>
                 <div className="space-y-3">
@@ -102,26 +114,22 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
                       {item.menu_item.description}
                     </Text>
                   </div>
-                  
+
                   {/* Toppings */}
                   {item.toppings.length > 0 && (
                     <div className="flex flex-wrap gap-2">
-                      {item.toppings.map(topping => (
-                        <Tag 
-                          key={topping.id} 
+                      {item.toppings.map((topping) => (
+                        <div
+                          key={topping.id}
                           className="bg-blue-50 text-blue-700 border-blue-200 px-3 py-1 rounded-full"
+                          style={{ display: "inline-block" }}
                         >
-                          ✨ {topping.name}
-                        </Tag>
+                          <Tag style={{ background: "transparent", border: "none", color: "inherit", padding: 0, margin: 0 }}>
+                            ✨ {topping.name}
+                          </Tag>
+                        </div>
                       ))}
                     </div>
-                  )}
-
-                  {/* Sugar Level */}
-                  {typeof item.sugar_level === 'number' && (
-                    <Tag className="bg-pink-50 text-pink-700 border-pink-200 px-3 py-1 rounded-full">
-                      🧁 หวาน {item.sugar_level}%
-                    </Tag>
                   )}
 
                   {/* Notes */}
@@ -139,27 +147,15 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
               <Col span={4}>
                 <div className="flex flex-col items-center space-y-2">
                   <div className="flex items-center space-x-2">
-                    <Button 
-                      icon={<MinusOutlined />} 
-                      size="small"
-                      shape="circle"
-                      onClick={() => onQuantityUpdate(item.id, item.quantity - 1)}
-                      className="border-gray-300"
-                    />
-                    <InputNumber 
-                      min={1} 
+                    <InputNumber
+                      min={1}
                       value={item.quantity}
-                      onChange={(value) => onQuantityUpdate(item.id, value || 1)}
+                      onChange={(value) =>
+                        onQuantityUpdate(item.id, value || 1)
+                      }
                       size="small"
-                      style={{ width: 60, textAlign: 'center' }}
+                      style={{ width: 60, textAlign: "center" }}
                       className="text-center"
-                    />
-                    <Button 
-                      icon={<PlusOutlined />} 
-                      size="small"
-                      shape="circle"
-                      onClick={() => onQuantityUpdate(item.id, item.quantity + 1)}
-                      className="border-gray-300"
                     />
                   </div>
                   <Text className="text-gray-500 text-sm">
@@ -171,7 +167,7 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
               {/* Price */}
               <Col span={3}>
                 <div className="text-right">
-                  <Text strong className="text-xl text-green-600">
+                  <Text strong className="text-xl">
                     ฿{item.total_price}
                   </Text>
                 </div>
@@ -179,9 +175,9 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
 
               {/* Delete Button */}
               <Col span={1}>
-                <Button 
-                  type="text" 
-                  danger 
+                <Button
+                  type="text"
+                  danger
                   icon={<DeleteOutlined />}
                   onClick={() => onRemoveItem(item.id)}
                   className="hover:bg-red-50"
@@ -195,45 +191,39 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
 
       {/* Summary Section */}
       <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-0 shadow-lg">
-        <div className="text-center p-6">
-          <div className="flex items-center justify-center space-x-4 mb-6">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-              <Text className="text-2xl font-bold text-green-600">฿</Text>
-            </div>
+        <div className="text-center">
+          <div className="flex items-center justify-center space-x-4 ">
+
             <div>
               <Title level={2} className="mb-1 text-gray-800">
                 ยอดรวมทั้งหมด
               </Title>
-              <Text className="text-gray-600 text-lg">
-                {getTotalItems()} รายการ
-              </Text>
+           
             </div>
           </div>
-          
+
           <Title level={1} className="text-green-600 mb-8">
             ฿{getTotalAmount().toLocaleString()}
           </Title>
-
-          <div className="flex justify-center space-x-4">
-            <Button 
+        </div>
+        <div className="flex justify-end gap-4">
+            <Button
               onClick={onBackToMenu}
-              icon={<ArrowLeftOutlined />}
               size="large"
               className="h-12 px-8 text-lg border-gray-300"
             >
               เลือกเมนูเพิ่ม
             </Button>
-            <Button 
-              type="primary" 
-              size="large" 
+            <Button
+              type="primary"
+              size="large"
               onClick={onCheckout}
               disabled={cart.length === 0}
-              className="h-12 px-8 text-lg bg-gradient-to-r from-green-500 to-emerald-500 border-0 shadow-lg"
+              className="h-12 px-8 text-lg"
             >
               ดำเนินการสั่งซื้อ
             </Button>
           </div>
-        </div>
       </Card>
     </div>
   );
