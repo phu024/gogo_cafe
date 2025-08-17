@@ -23,7 +23,7 @@ interface OrderCardProps {
 
 const MAX_ITEMS_TO_SHOW = 3;
 
-export const OrderCard: React.FC<OrderCardProps> = ({
+export const OrderCard: React.FC<OrderCardProps> = React.memo(({
   order,
   statusView,
   elapsed,
@@ -54,7 +54,8 @@ export const OrderCard: React.FC<OrderCardProps> = ({
       style={{ borderLeft: `6px solid ${statusView.color}` }}
       hoverable
     >
-      <div className="flex flex-col h-full">        {/* Order Header */}
+      <div className="flex flex-col h-full">        
+        {/* Order Header */}
         <div className="flex items-start justify-between mb-3">
           <div className="flex flex-col gap-2 min-w-0">
             <div className="flex items-center gap-2">
@@ -73,7 +74,8 @@ export const OrderCard: React.FC<OrderCardProps> = ({
               </span>
             </div>
           </div>
-        </div>        {/* Order Items */}
+        </div>        
+        {/* Order Items */}
         <div className="space-y-2 mb-4">
           {itemLines.map((line, idx) => (
             <div key={idx} className="flex items-start gap-2 text-sm">
@@ -123,6 +125,8 @@ export const OrderCard: React.FC<OrderCardProps> = ({
       </div>
     </Card>
   );
-};
+});
+
+OrderCard.displayName = "OrderCard";
 
 export default OrderCard;

@@ -7,6 +7,7 @@ import {
   DeleteOutlined,
   ShoppingCartOutlined,
   ArrowLeftOutlined,
+  EditOutlined
 } from "@ant-design/icons";
 import { CartItem } from "@/types";
 
@@ -181,18 +182,30 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
                 </div>
               </Col>
 
-              {/* Delete Button */}
-              <Col span={1}>
-                <Button
+
+              {/* Edit and Remove Buttons */}
+                <Col span={1}>
+                <div className="flex flex-row gap-3">
+                  <Button
+                  type="text"
+                  icon={<EditOutlined />}
+                  style={{ color: "#2563eb" }}
+                  className="hover:bg-blue-100"
+                  size="large"
+                  title="แก้ไขรายการ"
+                  />
+                  <Button
                   type="text"
                   danger
                   icon={<DeleteOutlined />}
                   onClick={() => onRemoveItem(item.id)}
-                  className="hover:bg-red-50"
+                  style={{ color: "#dc2626" }}
+                  className="hover:bg-red-100"
                   size="large"
-                  title="ลบรายการนี้"
-                />
-              </Col>
+                  title="ลบรายการ"
+                  />
+                </div>
+                </Col>
             </Row>
           </div>
         ))}

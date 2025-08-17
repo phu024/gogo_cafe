@@ -195,16 +195,16 @@ const OrderPage: React.FC = () => {
     setOrderStatus(1);
   }, [setCurrentStep, setOrderStatus]);
 
-  const resetOrder = () => {
+  const resetOrder = useCallback(() => {
     router.push('/order');
     setCurrentStep("menu");
     setSelectedCategory(null);
     setCart([]);
-  };
+  }, [router, setCurrentStep, setSelectedCategory, setCart]);
 
-  const handleBackToHome = () => {
+  const handleBackToHome = useCallback(() => {
     router.push('/');
-  };
+  }, [router]);
 
   const calculateOrderDetails = () => {
     return {

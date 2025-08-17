@@ -8,10 +8,10 @@ interface CartBadgeProps {
   className?: string;
 }
 
-const CartBadge: React.FC<CartBadgeProps> = ({ 
+const CartBadge: React.FC<CartBadgeProps> = React.memo(({ 
   cartCount, 
   onCartClick, 
-  className = 'text-right my-4' 
+  className = 'text-right my-4 mr-2' 
 }) => (
   <div className={className}>
     <Badge count={cartCount} showZero={false}>
@@ -27,6 +27,8 @@ const CartBadge: React.FC<CartBadgeProps> = ({
       </Button>
     </Badge>
   </div>
-);
+));
+
+CartBadge.displayName = "CartBadge";
 
 export default CartBadge;

@@ -93,10 +93,18 @@ const OrderMenuStep: React.FC<OrderMenuStepProps> = ({
               }
             >
               <div>
-                <div className="flex justify-between items-start mb-2">
+                <div className="flex justify-between items-start mb-2 border-b pb-2">
                   <Text strong className="text-lg">{item.name}</Text>
-                  <Tag color={item.is_available ? 'success' : 'error'}>
-                    {item.is_available ? 'พร้อมขาย' : 'หมด'}
+                  <Tag color={item.is_available ? 'green' : 'red'} style={{ fontWeight: 500, fontSize: 15, padding: '4px 12px', borderRadius: 20, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    {item.is_available ? (
+                      <>
+                        <span style={{ color: '#10b981' }}>พร้อมจำหน่าย</span>
+                      </>
+                    ) : (
+                      <>
+                        <span style={{ color: '#ef4444' }}>ไม่พร้อมจำหน่าย</span>
+                      </>
+                    )}
                   </Tag>
                 </div>
                 <Paragraph className="text-gray-600 text-sm mb-2 min-h-[40px]">
