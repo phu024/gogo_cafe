@@ -252,7 +252,7 @@ export const sampleOrders: Order[] = [
         payment_method: "CREDIT_CARD",
         payment_status: "COMPLETED",    
         order_time: new Date("2024-01-15T10:00:00Z"),
-        completed_time: new Date("2024-01-15T10:15:00Z"),
+        completed_time: new Date("2024-01-15T10:05:00Z"),
         notes: "ขอเข้ม ๆ",
         items: [
             {
