@@ -57,7 +57,7 @@ export const OrderCard: React.FC<OrderCardProps> = React.memo(
     const ready = order.order_status === "READY";
     const minutesElapsed = now.diff(orderTime, "minute");
     let badgeType: "new" | "urgent" | "late" | null = null;
-    if (!completed && !ready) {
+    if (!completed && !ready && order.order_status !== "CANCELED") {
       if (minutesElapsed < 1) badgeType = "new";
       else if (minutesElapsed < 5) badgeType = "urgent";
       else if (minutesElapsed > 15) badgeType = "late";

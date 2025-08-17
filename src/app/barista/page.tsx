@@ -28,6 +28,7 @@ import type { OrderStatus } from "@/types";
 import CurrentTime from "@/components/barista/CurrentTime";
 import StatisticsCard from "@/components/barista/StatisticsCard";
 import dayjs from "dayjs";
+import BaristaStatistics from "@/components/barista/BaristaStatistics";
 
 const { Text, Title } = Typography;
 const { Content } = Layout;
@@ -63,7 +64,8 @@ const BaristaPage: React.FC = () => {
   // Tab configuration helper
   const createTabItem = useCallback(
     (status: OrderStatus, label: string, emptyMessage: string) => {
-      const orders = byStatus(status);
+      // เรียง order เก่าขึ้นก่อนในแต่ละ tab สถานะเฉพาะ
+      const orders = byStatus(status).slice().sort((a, b) => new Date(a.order_time).getTime() - new Date(b.order_time).getTime());
       return {
         key: status,
         label: (
@@ -120,24 +122,27 @@ const BaristaPage: React.FC = () => {
   const allTabOrders = byStatus("PENDING")
     .concat(byStatus("IN_PROGRESS"))
     .concat(byStatus("READY"))
-    .concat(byStatus("COMPLETED"));
+    .concat(byStatus("COMPLETED"))
+    .concat(byStatus("CANCELED")); // เพิ่ม CANCELED
 
   const statusOrder = {
     PENDING: 1,
     IN_PROGRESS: 2,
     READY: 3,
     COMPLETED: 4,
+    CANCELED: 5,
   } as const;
 
   const allTabFiltered = allTabOrders
-    .filter(order => order.order_status !== "UN_PAYMENT" && order.order_status !== "CANCELED")
+    .filter(order => order.order_status !== "UN_PAYMENT") // ไม่กรอง CANCELED แล้ว
     .sort((a, b) => {
-      // เฉพาะสถานะที่อยู่ใน statusOrder เท่านั้น
+      // เรียงตามลำดับสถานะก่อน
       const aStatus = statusOrder[a.order_status as keyof typeof statusOrder] ?? 99;
       const bStatus = statusOrder[b.order_status as keyof typeof statusOrder] ?? 99;
       if (aStatus !== bStatus) {
         return aStatus - bStatus;
       }
+      // ภายในสถานะเดียวกัน เรียง order เก่าขึ้นก่อน
       return new Date(a.order_time).getTime() - new Date(b.order_time).getTime();
     });
 
@@ -228,32 +233,7 @@ const BaristaPage: React.FC = () => {
           </div>
         </div>
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
-          <StatisticsCard
-            title="รอดำเนินการ"
-            count={byStatus("PENDING").length}
-            icon={<CoffeeOutlined className="text-xl text-orange-500" />}
-            color="bg-orange-100"
-          />
-          <StatisticsCard
-            title="กำลังดำเนินการ"
-            count={byStatus("IN_PROGRESS").length}
-            icon={<CoffeeOutlined className="text-xl text-blue-500" />}
-            color="bg-blue-100"
-          />
-          <StatisticsCard
-            title="ดำเนินการเสร็จ (พร้อมรับ)"
-            count={byStatus("READY").length}
-            icon={<CoffeeOutlined className="text-xl text-green-500" />}
-            color="bg-green-100"
-          />
-          <StatisticsCard
-            title="ส่งมอบแล้ว"
-            count={byStatus("COMPLETED").length}
-            icon={<CoffeeOutlined className="text-xl text-purple-500" />}
-            color="bg-purple-100"
-          />
-        </div>
+        {/* <BaristaStatistics byStatus={byStatus} /> */}
         {/* Filters Card */}
         <Card className="mb-5 shadow-sm">
           <Row gutter={12} align="middle">
