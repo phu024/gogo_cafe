@@ -1,5 +1,5 @@
 // Common string literal types
-export type OrderStatus = "WAITING" | "IN_PROGRESS" | "READY" | "COMPLETED" | "CANCELED"
+export type OrderStatus = "WAITING" | "ACCEPTED" | "READY" | "COMPLETED" | "CANCELED"
 export type PaymentMethod = "CREDIT_CARD" | "DEBIT_CARD" | "CASH" | "ONLINE_BANKING" | "QR_CODE"
 export type PaymentStatus = "PENDING" | "COMPLETED" | "FAILED" | "REFUNDED"
 

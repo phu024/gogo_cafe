@@ -21,7 +21,7 @@ export interface StatusViewConfig {
 // Constant configurations
 const STATUS_ICONS: Record<OrderStatus, React.ReactNode> = {
   WAITING: React.createElement(ClockCircleOutlined),
-  IN_PROGRESS: React.createElement(CoffeeOutlined),
+  ACCEPTED: React.createElement(CoffeeOutlined),
   READY: React.createElement(CheckCircleOutlined),
   COMPLETED: React.createElement(CheckOutlined),
   CANCELED: null

@@ -160,7 +160,7 @@ export const OrderCard: React.FC<OrderCardProps> = React.memo(
                     {nextAction.text}
                   </Button>
                 )}
-                {(order.order_status === "WAITING" || order.order_status === "IN_PROGRESS") && (
+                {(order.order_status === "WAITING" || order.order_status === "ACCEPTED") && (
                   <Button
                     danger
                     size="middle"

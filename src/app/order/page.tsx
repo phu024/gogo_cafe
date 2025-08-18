@@ -192,7 +192,7 @@ const OrderPage: React.FC = () => {
 
   const handlePayment = useCallback(() => {
     setCurrentStep("success");
-    setOrderStatus("WAITING"); // หรือสถานะเริ่มต้นที่ต้องการ เช่น "WAITING" หรือ "IN_PROGRESS"
+    setOrderStatus("WAITING"); // หรือสถานะเริ่มต้นที่ต้องการ เช่น "WAITING" หรือ "ACCEPTED"
   }, [setCurrentStep, setOrderStatus]);
 
   const resetOrder = useCallback(() => {

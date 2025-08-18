@@ -25,12 +25,12 @@ interface OrderSuccessStepProps {
 }
 
 // Helper to filter out WAITING from status rendering
-const renderableStatuses = ["WAITING", "IN_PROGRESS", "READY", "COMPLETED", "CANCELED"] as const;
+const renderableStatuses = ["WAITING", "ACCEPTED", "READY", "COMPLETED", "CANCELED"] as const;
 type RenderableStatus = typeof renderableStatuses[number];
 
 const statusColorMap: Record<RenderableStatus, { bg: string; border: string; iconBg: string; icon: string; text: string; progress: string }> = {
   WAITING: { bg: "bg-yellow-50", border: "border-yellow-300", iconBg: "bg-yellow-100", icon: "text-yellow-600", text: "text-yellow-700", progress: "#FACC15" },
-  IN_PROGRESS: { bg: "bg-blue-50", border: "border-blue-300", iconBg: "bg-blue-100", icon: "text-blue-600", text: "text-blue-700", progress: "#3B82F6" },
+  ACCEPTED: { bg: "bg-blue-50", border: "border-blue-300", iconBg: "bg-blue-100", icon: "text-blue-600", text: "text-blue-700", progress: "#3B82F6" },
   READY: { bg: "bg-green-50", border: "border-green-300", iconBg: "bg-green-100", icon: "text-green-600", text: "text-green-700", progress: "#22C55E" },
   COMPLETED: { bg: "bg-green-50", border: "border-green-300", iconBg: "bg-green-100", icon: "text-green-600", text: "text-green-700", progress: "#22C55E" },
   CANCELED: { bg: "bg-red-50", border: "border-red-300", iconBg: "bg-red-100", icon: "text-red-600", text: "text-red-700", progress: "#EF4444" },
@@ -38,7 +38,7 @@ const statusColorMap: Record<RenderableStatus, { bg: string; border: string; ico
 
 const statusTextMap: Record<RenderableStatus, string> = {
   WAITING: "รอคิว",
-  IN_PROGRESS: "กำลังเตรียม/ชงเครื่องดื่ม",
+  ACCEPTED: "กำลังเตรียม/ชงเครื่องดื่ม",
   READY: "พร้อมรับที่เคาน์เตอร์",
   COMPLETED: "รับเครื่องดื่มแล้ว",
   CANCELED: "ออเดอร์ถูกยกเลิก",
@@ -46,7 +46,7 @@ const statusTextMap: Record<RenderableStatus, string> = {
 
 const statusWaitTextMap: Record<RenderableStatus, string> = {
   WAITING: "รอคิวก่อนเริ่มเตรียมเครื่องดื่ม",
-  IN_PROGRESS: "เวลารอโดยประมาณ 5-7 นาที",
+  ACCEPTED: "เวลารอโดยประมาณ 5-7 นาที",
   READY: "พร้อมรับได้ทันที",
   COMPLETED: "ขอบคุณที่ใช้บริการ GOGO CAFE",
   CANCELED: "ออเดอร์ถูกยกเลิก",
@@ -114,7 +114,7 @@ const OrderSuccessStep: React.FC<OrderSuccessStepProps> = ({
                     <Text strong className={`text-lg block mb-1 ${statusColorMap[currentStatus as RenderableStatus].text}`}>
                       {statusTextMap[currentStatus as RenderableStatus]}
                     </Text>
-                    {currentStatus === "IN_PROGRESS" && (
+                    {currentStatus === "ACCEPTED" && (
                       <Progress
                         percent={Math.round(progress)}
                         status={progress >= 100 ? "success" : "active"}

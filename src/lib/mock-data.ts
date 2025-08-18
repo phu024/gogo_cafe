@@ -330,12 +330,12 @@ export const sampleOrders: Order[] = [
         ]
     },
 
-    // 2 IN_PROGRESS
+    // 2 ACCEPTED
     {
         id: "GOGO-240115-004",
         User: users[2],
         total_amount: 250,
-        order_status: "IN_PROGRESS",
+        order_status: "ACCEPTED",
         payment_method: "QR_CODE",
         payment_status: "PENDING",    
         order_time: new Date("2024-01-15T13:00:00Z"),
@@ -367,7 +367,7 @@ export const sampleOrders: Order[] = [
         id: "GOGO-240115-005",
         User: users[3],
         total_amount: 300,
-        order_status: "IN_PROGRESS",
+        order_status: "ACCEPTED",
         payment_method: "DEBIT_CARD",
         payment_status: "PENDING",    
         order_time: new Date("2024-01-15T14:00:00Z"),
@@ -560,6 +560,6 @@ export function getToppingById(id: number): Topping | undefined {
     return toppings.find(topping => topping.id === id);
 }
 
-export function getOrdersByStatus(status: "COMPLETED" | "IN_PROGRESS" | "READY" | "PAID"): Order[] {
+export function getOrdersByStatus(status: "COMPLETED" | "ACCEPTED" | "READY" | "PAID"): Order[] {
     return sampleOrders.filter(order => order.order_status === status);
 }

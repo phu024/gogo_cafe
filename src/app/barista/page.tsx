@@ -37,7 +37,7 @@ const { RangePicker } = DatePicker;
 
 const TABBED_STATUSES: OrderStatus[] = [
   "WAITING",
-  "IN_PROGRESS",
+  "ACCEPTED",
   "READY",
   "COMPLETED",
   "CANCELED",
@@ -120,14 +120,14 @@ const BaristaPage: React.FC = () => {
     }
   };
   const allTabOrders = byStatus("WAITING")
-    .concat(byStatus("IN_PROGRESS"))
+    .concat(byStatus("ACCEPTED"))
     .concat(byStatus("READY"))
     .concat(byStatus("COMPLETED"))
     .concat(byStatus("CANCELED")); // เพิ่ม CANCELED
 
   const statusOrder = {
     WAITING: 1,
-    IN_PROGRESS: 2,
+    ACCEPTED: 2,
     READY: 3,
     COMPLETED: 4,
     CANCELED: 5,
@@ -190,7 +190,7 @@ const BaristaPage: React.FC = () => {
       case "WAITING":
         emptyMessage = "ไม่มีรายการที่รอดำเนินการ";
         break;
-      case "IN_PROGRESS":
+      case "ACCEPTED":
         emptyMessage = "ไม่มีรายการที่กำลังดำเนินการ";
         break;
       case "READY":

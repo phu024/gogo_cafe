@@ -3,7 +3,7 @@ import type { OrderStatus } from '@/types';
 
 const ORDER_STATUS_TIMING: Partial<Record<OrderStatus, { time: number }>> = {
   WAITING: { time: 5000 },
-  IN_PROGRESS: { time: 20000 },
+  ACCEPTED: { time: 20000 },
   READY: { time: 5000 },
   COMPLETED: undefined,
   CANCELED: undefined,
@@ -32,13 +32,13 @@ export function useOrderSuccessLogic(orderStatus: OrderStatus) {
     if (currentStatus === 'WAITING' && ORDER_STATUS_TIMING['WAITING']) {
       simulateProgress(ORDER_STATUS_TIMING['WAITING']!.time);
       statusTimeout = setTimeout(() => {
-        setCurrentStatus('IN_PROGRESS');
+        setCurrentStatus('ACCEPTED');
       }, ORDER_STATUS_TIMING['WAITING']!.time);
-    } else if (currentStatus === 'IN_PROGRESS' && ORDER_STATUS_TIMING['IN_PROGRESS']) {
-      simulateProgress(ORDER_STATUS_TIMING['IN_PROGRESS']!.time);
+    } else if (currentStatus === 'ACCEPTED' && ORDER_STATUS_TIMING['ACCEPTED']) {
+      simulateProgress(ORDER_STATUS_TIMING['ACCEPTED']!.time);
       statusTimeout = setTimeout(() => {
         setCurrentStatus('READY');
-      }, ORDER_STATUS_TIMING['IN_PROGRESS']!.time);
+      }, ORDER_STATUS_TIMING['ACCEPTED']!.time);
     } else if (currentStatus === 'READY' && ORDER_STATUS_TIMING['READY']) {
       statusTimeout = setTimeout(() => {
         setCurrentStatus('COMPLETED');

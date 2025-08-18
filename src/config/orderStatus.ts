@@ -15,8 +15,8 @@ export interface OrderStatusConfigItem {
 
 // Workflow configuration
 const ORDER_WORKFLOW: Partial<Record<OrderStatus, OrderStatus>> = {
-  'WAITING': 'IN_PROGRESS',
-  'IN_PROGRESS': 'READY',
+  'WAITING': 'ACCEPTED',
+  'ACCEPTED': 'READY',
   'READY': 'COMPLETED'
 };
 
@@ -33,14 +33,14 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatus, OrderStatusConfigItem> = {
     nextAction: 'เริ่มเตรียมเครื่องดื่ม',
     description: 'Order is waiting in queue after payment'
   },
-  IN_PROGRESS: { 
-    key: 'IN_PROGRESS',  
+  ACCEPTED: { 
+    key: 'ACCEPTED',  
     labelTh: 'กำลังดำเนินการ',
     labelEn: 'In Progress',  
     color: '#3b82f6', 
     showInTabs: true,  
     active: true,
-    next: ORDER_WORKFLOW['IN_PROGRESS'],
+    next: ORDER_WORKFLOW['ACCEPTED'],
     nextAction: 'ดำเนินการเสร็จสิ้น',
     description: 'Order is being prepared by barista'
   },
