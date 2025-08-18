@@ -10,6 +10,7 @@ import {
   EditOutlined
 } from "@ant-design/icons";
 import { CartItem } from "@/types";
+import { useOrderCartLogic } from '@/hooks/useOrderCart';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -28,13 +29,7 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
   onCheckout,
   onBackToMenu,
 }) => {
-  const getTotalAmount = () => {
-    return cart.reduce((sum, item) => sum + item.total_price, 0);
-  };
-
-  const getTotalItems = () => {
-    return cart.reduce((sum, item) => sum + item.quantity, 0);
-  };
+  const { totalAmount, totalItems } = useOrderCartLogic(cart);
 
   if (cart.length === 0) {
     return (
@@ -81,7 +76,7 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
             </Paragraph>
           </div>
         </div>
-        <Badge count={getTotalItems()} className="cart-badge">
+        <Badge count={totalItems} className="cart-badge">
           <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg">
             <ShoppingCartOutlined className="text-2xl text-blue-600" />
           </div>
@@ -228,7 +223,7 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
           </Col>
           <Col>
             <Text className="text-gray-600">
-              จำนวนรายการ: {getTotalItems()} ชิ้น
+              จำนวนรายการ: {totalItems} ชิ้น
             </Text>
           </Col>
         </Row>
@@ -238,7 +233,7 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
           </Col>
           <Col>
             <Text strong className="text-xl text-green-700">
-              ฿{getTotalAmount().toLocaleString()}
+              ฿{totalAmount.toLocaleString()}
             </Text>
           </Col>
         </Row>

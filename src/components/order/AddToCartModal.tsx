@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Modal, Typography, InputNumber, Input, Divider, Slider, Checkbox } from 'antd';
 import { MenuItem, Topping } from '@/types';
+import { useAddToCartModalLogic } from '@/hooks/useAddToCartModal';
 
 const { Text } = Typography;
 
@@ -35,28 +36,10 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
   sugarLevel,
   onSugarLevelChange,
 }) => {
-  const [qtyError, setQtyError] = useState<string | null>(null);
-
-  useEffect(()=>{
-    if (!isVisible) { setQtyError(null); }
-  }, [isVisible]);
-
-  const validateQty = (val: number) => {
-    if (!Number.isFinite(val) || val < 1) {
-      setQtyError('จำนวนต้องเป็นตัวเลขตั้งแต่ 1 ขึ้นไป');
-      return false;
-    }
-    setQtyError(null);
-    return true;
-  };
+  const { qtyError, validateQty, getTotalPrice } = useAddToCartModalLogic(isVisible, selectedItem, selectedToppings, quantity);
 
   const handleOk = () => {
     if (validateQty(quantity)) onOk();
-  };
-
-  const getTotalPrice = () => {
-    if (!selectedItem) return 0;
-    return (selectedItem.base_price + selectedToppings.reduce((sum, t) => sum + t.price, 0)) * quantity;
   };
 
   return (

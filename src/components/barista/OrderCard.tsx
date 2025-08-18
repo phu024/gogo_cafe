@@ -1,10 +1,11 @@
 // filepath: g:\Train\Test\gogo_cafe\src\components\barista\OrderCard.tsx
-import React, { useMemo } from "react";
+import React from "react";
 import { Card, Button, Badge as AntdBadge } from "antd";
 import { FileTextOutlined } from "@ant-design/icons";
 import type { Order, OrderStatus } from "@/types";
 import type { StatusViewConfig } from "@/hooks/useBaristaOrders";
 import dayjs from "dayjs";
+import { useOrderCardLogic } from '@/hooks/useOrderCard';
 
 export interface NextAction {
   to: OrderStatus;
@@ -22,7 +23,7 @@ interface OrderCardProps {
   onToggleExpand: (orderId: string) => void;
 }
 
-const MAX_ITEMS_TO_SHOW = 3;
+// const MAX_ITEMS_TO_SHOW = 3;
 
 export const OrderCard: React.FC<OrderCardProps> = React.memo(
   ({
@@ -34,34 +35,7 @@ export const OrderCard: React.FC<OrderCardProps> = React.memo(
     isExpanded,
     onToggleExpand,
   }) => {
-    // Memoize item lines to prevent unnecessary recalculations
-    const { itemLines, hiddenCount } = useMemo(() => {
-      const lines = order.items.map((item) => {
-        const toppings =
-          item.toppings?.length > 0
-            ? ` (${item.toppings.map((t) => t.name).join(", ")})`
-            : "";
-        return `${item.quantity}x ${item.menu_item.name}${toppings}`;
-      });
-
-      return {
-        itemLines: isExpanded ? lines : lines.slice(0, MAX_ITEMS_TO_SHOW),
-        hiddenCount: Math.max(0, lines.length - MAX_ITEMS_TO_SHOW),
-      };
-    }, [order.items, isExpanded]);
-
-    // BADGE LOGIC
-    const now = dayjs();
-    const orderTime = dayjs(order.order_time);
-    const completed = order.order_status === "COMPLETED";
-    const ready = order.order_status === "READY";
-    const minutesElapsed = now.diff(orderTime, "minute");
-    let badgeType: "new" | "urgent" | "late" | null = null;
-    if (!completed && !ready && order.order_status !== "CANCELED") {
-      if (minutesElapsed < 1) badgeType = "new";
-      else if (minutesElapsed < 5) badgeType = "urgent";
-      else if (minutesElapsed > 15) badgeType = "late";
-    }
+    const { itemLines, hiddenCount, badgeType } = useOrderCardLogic(order, isExpanded);
 
     return (
       <Card

@@ -1,19 +1,12 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Typography } from 'antd';
+import { useCurrentTimeLogic } from '@/hooks/useCurrentTime';
 
 const { Text } = Typography;
 
 const CurrentTime: React.FC = () => {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentDate(new Date());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
+  const { currentDate } = useCurrentTimeLogic();
 
   return (
     <div className="text-right">

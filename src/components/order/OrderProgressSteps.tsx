@@ -6,6 +6,7 @@ import {
   CreditCardOutlined, 
   QrcodeOutlined 
 } from '@ant-design/icons';
+import { useOrderProgressLogic } from '@/hooks/useOrderProgress';
 
 type OrderStep = "menu" | "cart" | "payment" | "success";
 
@@ -42,18 +43,16 @@ const STEPS_CONFIG: Record<OrderStep, StepConfig> = {
   }
 };
 
-const STEP_ORDER: OrderStep[] = ['menu', 'cart', 'payment', 'success'];
-
 const OrderProgressSteps: React.FC<OrderProgressStepsProps> = ({ currentStep }) => {
-  const getCurrentStepIndex = () => STEP_ORDER.indexOf(currentStep);
+  const { currentStepIndex, stepOrder } = useOrderProgressLogic(currentStep);
 
   return (
     <Steps
-      current={getCurrentStepIndex()}
+      current={currentStepIndex}
       className="mb-8"
-      items={STEP_ORDER.map(step => ({
+      items={stepOrder.map(step => ({
         ...STEPS_CONFIG[step],
-        status: STEP_ORDER.indexOf(step) === getCurrentStepIndex() ? 'process' : undefined
+        status: stepOrder.indexOf(step) === currentStepIndex ? 'process' : undefined
       }))}
     />
   );

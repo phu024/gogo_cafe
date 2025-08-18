@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Typography, Card, Button, Space, Progress, QRCode, notification } from "antd";
 import { QrcodeOutlined, CoffeeOutlined } from "@ant-design/icons";
 import { OrderStatus } from "../../types";
+import { useOrderSuccessLogic } from '@/hooks/useOrderSuccess';
 
 const { Title, Text } = Typography;
 
@@ -22,14 +23,6 @@ interface OrderSuccessStepProps {
     totalAmount: number;
   };
 }
-
-const ORDER_STATUS_TIMING: Partial<Record<OrderStatus, { time: number }>> = {
-  WAITING: { time: 5000 }, // รอคิวหลังจ่ายเงิน
-  IN_PROGRESS: { time: 20000 }, // เตรียม + ชง 20 วินาที
-  READY: { time: 5000 }, // พร้อมรับ 5 วินาที
-  COMPLETED: undefined,
-  CANCELED: undefined,
-};
 
 // Helper to filter out WAITING from status rendering
 const renderableStatuses = ["WAITING", "IN_PROGRESS", "READY", "COMPLETED", "CANCELED"] as const;
@@ -60,96 +53,16 @@ const statusWaitTextMap: Record<RenderableStatus, string> = {
 };
 
 const OrderSuccessStep: React.FC<OrderSuccessStepProps> = ({
-  orderStatus: initialStatus,
+  orderStatus,
   onResetOrder,
   onBackToHome,
   orderDetails,
 }) => {
-  const [currentStatus, setCurrentStatus] = useState(initialStatus);
-  const [progress, setProgress] = useState(0);
+  const { currentStatus, progress } = useOrderSuccessLogic(orderStatus);
   const [api, contextHolder] = notification.useNotification();
-  const [notifiedStatus, setNotifiedStatus] = useState<OrderStatus | null>(initialStatus);
 
-  useEffect(() => {
-    let progressInterval: NodeJS.Timeout;
-    let statusTimeout: NodeJS.Timeout;
-
-    // Show notification only once per status change
-    if (notifiedStatus !== currentStatus) {
-      switch (currentStatus) {
-        case "WAITING":
-          api.info({
-            message: "สถานะออเดอร์: กำลังรอคิวเพื่อเตรียมเครื่องดื่ม",
-            description: "กรุณารอสักครู่ บาริสต้าจะเริ่มเตรียมเครื่องดื่มของคุณในไม่ช้า",
-            placement: "topRight",
-          });
-          break;
-        case "IN_PROGRESS":
-          api.info({
-            message: "สถานะออเดอร์: กำลังเตรียม/ชงเครื่องดื่ม",
-            description: "บาริสต้ากำลังเตรียมเครื่องดื่มของคุณ กรุณารอสักครู่",
-            placement: "topRight",
-          });
-          break;
-        case "READY":
-          api.success({
-            message: "สถานะออเดอร์: พร้อมรับที่เคาน์เตอร์",
-            description: "เครื่องดื่มของคุณพร้อมรับแล้วที่เคาน์เตอร์!",
-            placement: "topRight",
-          });
-          break;
-        case "COMPLETED":
-          api.success({
-            message: "สถานะออเดอร์: รับเครื่องดื่มแล้ว",
-            description: "ขอบคุณที่ใช้บริการ GOGO CAFE!",
-            placement: "topRight",
-          });
-          break;
-        case "CANCELED":
-          api.error({
-            message: "สถานะออเดอร์: ออเดอร์ถูกยกเลิก",
-            description: "ออเดอร์นี้ถูกยกเลิก กรุณาติดต่อพนักงานหากมีข้อสงสัย",
-            placement: "topRight",
-          });
-          break;
-        default:
-          break;
-      }
-      setNotifiedStatus(currentStatus);
-    }
-
-    const simulateProgress = (duration: number) => {
-      const startTime = Date.now();
-      progressInterval = setInterval(() => {
-        const elapsed = Date.now() - startTime;
-        const newProgress = Math.min((elapsed / duration) * 100, 100);
-        setProgress(newProgress);
-        if (newProgress >= 100) {
-          clearInterval(progressInterval);
-        }
-      }, 100);
-    };
-
-    if (currentStatus === "WAITING" && ORDER_STATUS_TIMING["WAITING"]) {
-      statusTimeout = setTimeout(() => {
-        setCurrentStatus("IN_PROGRESS");
-      }, ORDER_STATUS_TIMING["WAITING"]!.time);
-    } else if (currentStatus === "IN_PROGRESS" && ORDER_STATUS_TIMING["IN_PROGRESS"]) {
-      simulateProgress(ORDER_STATUS_TIMING["IN_PROGRESS"]!.time);
-      statusTimeout = setTimeout(() => {
-        setCurrentStatus("READY");
-      }, ORDER_STATUS_TIMING["IN_PROGRESS"]!.time);
-    } else if (currentStatus === "READY" && ORDER_STATUS_TIMING["READY"]) {
-      statusTimeout = setTimeout(() => {
-        setCurrentStatus("COMPLETED");
-      }, ORDER_STATUS_TIMING["READY"]!.time);
-    }
-
-    return () => {
-      clearInterval(progressInterval);
-      clearTimeout(statusTimeout);
-    };
-  }, [currentStatus, api, notifiedStatus]);
+  const nowTime = React.useMemo(() => new Date().toLocaleString('th-TH'), []);
+  const displayOrderTime = orderDetails.orderTime ?? nowTime;
 
   return (
     <div className="py-8">
@@ -163,9 +76,9 @@ const OrderSuccessStep: React.FC<OrderSuccessStepProps> = ({
           <Title level={2} className="text-green-600 !mb-2">
             สั่งซื้อสำเร็จ!
           </Title>
-          <Text className="text-gray-600">
+          {/* <Text className="text-gray-600">
             เลขที่ออเดอร์: <Text strong className="text-blue-600">{orderDetails.orderId}</Text>
-          </Text>
+          </Text> */}
         </div>
 
         {/* Main Card */}
@@ -210,7 +123,7 @@ const OrderSuccessStep: React.FC<OrderSuccessStepProps> = ({
             <Title level={5} className="mb-3">รายละเอียดการสั่งซื้อ</Title>
             <div className="mb-2 flex flex-col gap-1">
               <Text className="text-gray-600">หมายเลขออเดอร์: <Text strong className="text-blue-600">{orderDetails.orderId}</Text></Text>
-              <Text className="text-gray-600">เวลาสั่งซื้อ: <Text strong>{orderDetails.orderTime ? orderDetails.orderTime : new Date().toLocaleString('th-TH')}</Text></Text>
+              <Text className="text-gray-600">เวลาสั่งซื้อ: <Text strong>{displayOrderTime}</Text></Text>
             </div>
             
             <div className="space-y-3">

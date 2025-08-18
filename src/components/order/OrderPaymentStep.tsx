@@ -6,6 +6,7 @@ import {
   QrcodeOutlined,
 } from "@ant-design/icons";
 import { CartItem } from "@/types";
+import { useOrderPaymentLogic } from '@/hooks/useOrderPayment';
 
 const { Title, Text } = Typography;
 
@@ -20,9 +21,7 @@ const OrderPaymentStep: React.FC<OrderPaymentStepProps> = ({
   onPayment,
   onBackToCart,
 }) => {
-  const getTotalAmount = () => {
-    return cart.reduce((sum, item) => sum + item.total_price, 0);
-  };
+  const { totalAmount } = useOrderPaymentLogic(cart);
 
   const paymentMethods = [
     {
@@ -114,7 +113,7 @@ const OrderPaymentStep: React.FC<OrderPaymentStepProps> = ({
                 <div className="text-right">
                   <Text className="text-gray-600">ยอดรวม</Text>
                   <div className="text-3xl font-bold text-green-600">
-                    ฿{getTotalAmount().toLocaleString()}
+                    ฿{totalAmount.toLocaleString()}
                   </div>
                 </div>
               </div>

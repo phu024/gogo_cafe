@@ -2,6 +2,7 @@ import React from 'react';
 import { Typography, Card, Row, Col, Button, Space, Divider, Tag } from 'antd';
 import { CoffeeOutlined, PlusOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { MenuCategory, MenuItem } from '@/types';
+import { useOrderMenuLogic } from '@/hooks/useOrderMenu';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -22,11 +23,7 @@ const OrderMenuStep: React.FC<OrderMenuStepProps> = ({
   onItemSelect,
   onBack,
 }) => {
-  const getItemsByCategory = (categoryId: number) => {
-    return menuItems.filter(item => item.category_id === categoryId);
-  };
-
-  const displayItems = selectedCategory ? getItemsByCategory(selectedCategory) : menuItems;
+  const { displayItems } = useOrderMenuLogic(menuItems, selectedCategory);
 
   return (
     <div>
