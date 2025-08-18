@@ -48,7 +48,7 @@ const statusWaitTextMap: Record<RenderableStatus, string> = {
   WAITING: "รอคิวก่อนเริ่มเตรียมเครื่องดื่ม",
   IN_PROGRESS: "เวลารอโดยประมาณ 5-7 นาที",
   READY: "พร้อมรับได้ทันที",
-  COMPLETED: "รับเครื่องดื่มแล้ว",
+  COMPLETED: "ขอบคุณที่ใช้บริการ GOGO CAFE",
   CANCELED: "ออเดอร์ถูกยกเลิก",
 };
 
@@ -60,9 +60,22 @@ const OrderSuccessStep: React.FC<OrderSuccessStepProps> = ({
 }) => {
   const { currentStatus, progress } = useOrderSuccessLogic(orderStatus);
   const [api, contextHolder] = notification.useNotification();
+  const lastNotifiedStatusRef = React.useRef<string | null>(null);
 
   const nowTime = React.useMemo(() => new Date().toLocaleString('th-TH'), []);
   const displayOrderTime = orderDetails.orderTime ?? nowTime;
+
+  React.useEffect(() => {
+    if (lastNotifiedStatusRef.current !== currentStatus) {
+      api.success({
+        message: `สถานะออเดอร์: ${statusTextMap[currentStatus as RenderableStatus]}`,
+        description: `${statusWaitTextMap[currentStatus as RenderableStatus]}`,
+        // duration: 3,
+      });
+      lastNotifiedStatusRef.current = currentStatus;
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStatus]);
 
   return (
     <div className="py-8">
