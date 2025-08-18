@@ -70,7 +70,7 @@ const OrderSuccessStep: React.FC<OrderSuccessStepProps> = ({
       api.success({
         message: `สถานะออเดอร์: ${statusTextMap[currentStatus as RenderableStatus]}`,
         description: `${statusWaitTextMap[currentStatus as RenderableStatus]}`,
-        // duration: 3,
+        duration: 3,
       });
       lastNotifiedStatusRef.current = currentStatus;
     }
