@@ -15,32 +15,23 @@ export interface OrderStatusConfigItem {
 
 // Workflow configuration
 const ORDER_WORKFLOW: Partial<Record<OrderStatus, OrderStatus>> = {
-  'PENDING': 'IN_PROGRESS',
+  'WAITING': 'IN_PROGRESS',
   'IN_PROGRESS': 'READY',
   'READY': 'COMPLETED'
 };
 
 // Base configuration for all order statuses
 export const ORDER_STATUS_CONFIG: Record<OrderStatus, OrderStatusConfigItem> = {
-  UN_PAYMENT: { 
-    key: 'UN_PAYMENT',   
-    labelTh: 'รอชำระ',
-    labelEn: 'Unpaid',   
-    color: '#a855f7', 
-    showInTabs: false, 
-    active: false,
-    description: 'Order created but payment not yet received'
-  },
-  PENDING: { 
-    key: 'PENDING',      
-    labelTh: 'รอดำเนินการ',
-    labelEn: 'Pending',     
-    color: '#f59e0b', 
+  WAITING: { 
+    key: 'WAITING',      
+    labelTh: 'รอคิว',
+    labelEn: 'Waiting',     
+    color: '#facc15', 
     showInTabs: true,  
     active: true,
-    next: ORDER_WORKFLOW['PENDING'],
-    nextAction: 'เริ่มดำเนินการ',
-    description: 'Order received and waiting to be prepared'
+    next: ORDER_WORKFLOW['WAITING'],
+    nextAction: 'เริ่มเตรียมเครื่องดื่ม',
+    description: 'Order is waiting in queue after payment'
   },
   IN_PROGRESS: { 
     key: 'IN_PROGRESS',  

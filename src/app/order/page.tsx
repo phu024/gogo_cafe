@@ -7,7 +7,7 @@ import {
   menuItems as mockMenuItems, 
   toppings as mockToppings 
 } from "@/lib/mock-data";
-import type { MenuCategory, MenuItem, Topping, CartItem } from "@/types";
+import type { MenuCategory, MenuItem, Topping, CartItem, OrderStatus } from "@/types";
 import Header from "@/components/header";
 import {
   OrderMenuStep,
@@ -27,7 +27,7 @@ const useOrderManagement = () => {
   // Core order state
   const [cart, setCart] = useState<CartItem[]>([]);
   const [currentStep, setCurrentStep] = useState<OrderStep>("menu");
-  const [orderStatus, setOrderStatus] = useState<number>(1);
+  const [orderStatus, setOrderStatus] = useState<OrderStatus>("WAITING");
 
   // Menu state
   const [menuCategories, setMenuCategories] = useState<MenuCategory[]>([]);
@@ -192,7 +192,7 @@ const OrderPage: React.FC = () => {
 
   const handlePayment = useCallback(() => {
     setCurrentStep("success");
-    setOrderStatus(1);
+    setOrderStatus("WAITING"); // หรือสถานะเริ่มต้นที่ต้องการ เช่น "WAITING" หรือ "IN_PROGRESS"
   }, [setCurrentStep, setOrderStatus]);
 
   const resetOrder = useCallback(() => {

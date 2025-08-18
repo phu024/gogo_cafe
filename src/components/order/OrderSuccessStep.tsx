@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Card, Button, Space, Progress } from "antd";
+import { Typography, Card, Button, Space, Progress, QRCode, notification } from "antd";
 import { QrcodeOutlined, CoffeeOutlined } from "@ant-design/icons";
+import { OrderStatus } from "../../types";
 
 const { Title, Text } = Typography;
 
 interface OrderSuccessStepProps {
-  orderStatus: number;
+  orderStatus: OrderStatus;
   onResetOrder: () => void;
   onBackToHome: () => void;
   orderDetails: {
     orderId: string;
+    orderTime?: string;
     items: {
       id: number;
       name: string;
@@ -21,10 +23,40 @@ interface OrderSuccessStepProps {
   };
 }
 
-const ORDER_STATUS_TIMING = {
-  PREPARING: { status: 1, time: 5000 }, // 5 seconds
-  BREWING: { status: 2, time: 8000 },   // 8 seconds
-  READY: { status: 3, time: 0 }         // Final state
+const ORDER_STATUS_TIMING: Partial<Record<OrderStatus, { time: number }>> = {
+  WAITING: { time: 5000 }, // รอคิวหลังจ่ายเงิน
+  IN_PROGRESS: { time: 20000 }, // เตรียม + ชง 20 วินาที
+  READY: { time: 5000 }, // พร้อมรับ 5 วินาที
+  COMPLETED: undefined,
+  CANCELED: undefined,
+};
+
+// Helper to filter out WAITING from status rendering
+const renderableStatuses = ["WAITING", "IN_PROGRESS", "READY", "COMPLETED", "CANCELED"] as const;
+type RenderableStatus = typeof renderableStatuses[number];
+
+const statusColorMap: Record<RenderableStatus, { bg: string; border: string; iconBg: string; icon: string; text: string; progress: string }> = {
+  WAITING: { bg: "bg-yellow-50", border: "border-yellow-300", iconBg: "bg-yellow-100", icon: "text-yellow-600", text: "text-yellow-700", progress: "#FACC15" },
+  IN_PROGRESS: { bg: "bg-blue-50", border: "border-blue-300", iconBg: "bg-blue-100", icon: "text-blue-600", text: "text-blue-700", progress: "#3B82F6" },
+  READY: { bg: "bg-green-50", border: "border-green-300", iconBg: "bg-green-100", icon: "text-green-600", text: "text-green-700", progress: "#22C55E" },
+  COMPLETED: { bg: "bg-green-50", border: "border-green-300", iconBg: "bg-green-100", icon: "text-green-600", text: "text-green-700", progress: "#22C55E" },
+  CANCELED: { bg: "bg-red-50", border: "border-red-300", iconBg: "bg-red-100", icon: "text-red-600", text: "text-red-700", progress: "#EF4444" },
+};
+
+const statusTextMap: Record<RenderableStatus, string> = {
+  WAITING: "รอคิว",
+  IN_PROGRESS: "กำลังเตรียม/ชงเครื่องดื่ม",
+  READY: "พร้อมรับที่เคาน์เตอร์",
+  COMPLETED: "รับเครื่องดื่มแล้ว",
+  CANCELED: "ออเดอร์ถูกยกเลิก",
+};
+
+const statusWaitTextMap: Record<RenderableStatus, string> = {
+  WAITING: "รอคิวก่อนเริ่มเตรียมเครื่องดื่ม",
+  IN_PROGRESS: "เวลารอโดยประมาณ 5-7 นาที",
+  READY: "พร้อมรับได้ทันที",
+  COMPLETED: "รับเครื่องดื่มแล้ว",
+  CANCELED: "ออเดอร์ถูกยกเลิก",
 };
 
 const OrderSuccessStep: React.FC<OrderSuccessStepProps> = ({
@@ -35,10 +67,56 @@ const OrderSuccessStep: React.FC<OrderSuccessStepProps> = ({
 }) => {
   const [currentStatus, setCurrentStatus] = useState(initialStatus);
   const [progress, setProgress] = useState(0);
+  const [api, contextHolder] = notification.useNotification();
+  const [notifiedStatus, setNotifiedStatus] = useState<OrderStatus | null>(initialStatus);
 
   useEffect(() => {
     let progressInterval: NodeJS.Timeout;
     let statusTimeout: NodeJS.Timeout;
+
+    // Show notification only once per status change
+    if (notifiedStatus !== currentStatus) {
+      switch (currentStatus) {
+        case "WAITING":
+          api.info({
+            message: "สถานะออเดอร์: กำลังรอคิวเพื่อเตรียมเครื่องดื่ม",
+            description: "กรุณารอสักครู่ บาริสต้าจะเริ่มเตรียมเครื่องดื่มของคุณในไม่ช้า",
+            placement: "topRight",
+          });
+          break;
+        case "IN_PROGRESS":
+          api.info({
+            message: "สถานะออเดอร์: กำลังเตรียม/ชงเครื่องดื่ม",
+            description: "บาริสต้ากำลังเตรียมเครื่องดื่มของคุณ กรุณารอสักครู่",
+            placement: "topRight",
+          });
+          break;
+        case "READY":
+          api.success({
+            message: "สถานะออเดอร์: พร้อมรับที่เคาน์เตอร์",
+            description: "เครื่องดื่มของคุณพร้อมรับแล้วที่เคาน์เตอร์!",
+            placement: "topRight",
+          });
+          break;
+        case "COMPLETED":
+          api.success({
+            message: "สถานะออเดอร์: รับเครื่องดื่มแล้ว",
+            description: "ขอบคุณที่ใช้บริการ GOGO CAFE!",
+            placement: "topRight",
+          });
+          break;
+        case "CANCELED":
+          api.error({
+            message: "สถานะออเดอร์: ออเดอร์ถูกยกเลิก",
+            description: "ออเดอร์นี้ถูกยกเลิก กรุณาติดต่อพนักงานหากมีข้อสงสัย",
+            placement: "topRight",
+          });
+          break;
+        default:
+          break;
+      }
+      setNotifiedStatus(currentStatus);
+    }
 
     const simulateProgress = (duration: number) => {
       const startTime = Date.now();
@@ -46,34 +124,36 @@ const OrderSuccessStep: React.FC<OrderSuccessStepProps> = ({
         const elapsed = Date.now() - startTime;
         const newProgress = Math.min((elapsed / duration) * 100, 100);
         setProgress(newProgress);
-        
         if (newProgress >= 100) {
           clearInterval(progressInterval);
         }
       }, 100);
     };
 
-    if (currentStatus === ORDER_STATUS_TIMING.PREPARING.status) {
-      simulateProgress(ORDER_STATUS_TIMING.PREPARING.time);
+    if (currentStatus === "WAITING" && ORDER_STATUS_TIMING["WAITING"]) {
       statusTimeout = setTimeout(() => {
-        setCurrentStatus(ORDER_STATUS_TIMING.BREWING.status);
-      }, ORDER_STATUS_TIMING.PREPARING.time);
-    } else if (currentStatus === ORDER_STATUS_TIMING.BREWING.status) {
-      setProgress(0);
-      simulateProgress(ORDER_STATUS_TIMING.BREWING.time);
+        setCurrentStatus("IN_PROGRESS");
+      }, ORDER_STATUS_TIMING["WAITING"]!.time);
+    } else if (currentStatus === "IN_PROGRESS" && ORDER_STATUS_TIMING["IN_PROGRESS"]) {
+      simulateProgress(ORDER_STATUS_TIMING["IN_PROGRESS"]!.time);
       statusTimeout = setTimeout(() => {
-        setCurrentStatus(ORDER_STATUS_TIMING.READY.status);
-      }, ORDER_STATUS_TIMING.BREWING.time);
+        setCurrentStatus("READY");
+      }, ORDER_STATUS_TIMING["IN_PROGRESS"]!.time);
+    } else if (currentStatus === "READY" && ORDER_STATUS_TIMING["READY"]) {
+      statusTimeout = setTimeout(() => {
+        setCurrentStatus("COMPLETED");
+      }, ORDER_STATUS_TIMING["READY"]!.time);
     }
 
     return () => {
       clearInterval(progressInterval);
       clearTimeout(statusTimeout);
     };
-  }, [currentStatus]);
+  }, [currentStatus, api, notifiedStatus]);
 
   return (
     <div className="py-8">
+      {contextHolder}
       <div className="max-w-2xl mx-auto">
         {/* Success Header */}
         <div className="text-center mb-6">
@@ -91,76 +171,51 @@ const OrderSuccessStep: React.FC<OrderSuccessStepProps> = ({
         {/* Main Card */}
         <Card className="shadow-sm">
           {/* Status Section */}
-          <div className="mb-8">
-            <div
-              className={`p-5 rounded-lg border ${
-                currentStatus === 1
-                  ? "bg-blue-50 border-blue-300"
-                  : currentStatus === 2
-                  ? "bg-orange-50 border-orange-300"
-                  : "bg-green-50 border-green-300"
-              }`}
-            >
-              <div className="flex items-center gap-4">
-                <div
-                  className={`w-14 h-14 rounded-full flex items-center justify-center ${
-                    currentStatus === 1
-                      ? "bg-blue-100"
-                      : currentStatus === 2
-                      ? "bg-orange-100"
-                      : "bg-green-100"
-                  }`}
-                >
-                  <CoffeeOutlined
-                    className={`text-2xl ${
-                      currentStatus === 1
-                        ? "text-blue-600"
-                        : currentStatus === 2
-                        ? "text-orange-600"
-                        : "text-green-600"
-                    }`}
-                  />
-                </div>
-                <div className="flex-1">
-                  <Text strong className={`text-lg block mb-1 ${
-                    currentStatus === 1
-                      ? "text-blue-700"
-                      : currentStatus === 2
-                      ? "text-orange-700"
-                      : "text-green-700"
-                  }`}>
-                    {currentStatus === 1
-                      ? "กำลังเตรียมเครื่องดื่ม"
-                      : currentStatus === 2
-                      ? "กำลังชงเครื่องดื่ม"
-                      : "พร้อมรับที่เคาน์เตอร์"}
-                  </Text>
-                  {currentStatus !== 3 && (
-                    <Progress 
-                      percent={Math.round(progress)} 
-                      status={progress >= 100 ? "success" : "active"}
-                      strokeColor={currentStatus === 1 ? "#3B82F6" : "#F97316"}
-                      className="mb-1"
+          {renderableStatuses.includes(currentStatus as RenderableStatus) && (
+            <div className="mb-8">
+              <div
+                className={`p-5 rounded-lg border ${statusColorMap[currentStatus as RenderableStatus].bg} ${statusColorMap[currentStatus as RenderableStatus].border}`}
+              >
+                <div className="flex items-center gap-4">
+                  <div
+                    className={`w-14 h-14 rounded-full flex items-center justify-center ${statusColorMap[currentStatus as RenderableStatus].iconBg}`}
+                  >
+                    <CoffeeOutlined
+                      className={`text-2xl ${statusColorMap[currentStatus as RenderableStatus].icon}`}
                     />
-                  )}
-                  <Text className="text-gray-600 text-sm">
-                    {currentStatus === 3 
-                      ? "พร้อมรับได้ทันที"
-                      : currentStatus === 2 
-                      ? "เวลารอโดยประมาณ 2-3 นาที"
-                      : "เวลารอโดยประมาณ 5-7 นาที"}
-                  </Text>
+                  </div>
+                  <div className="flex-1">
+                    <Text strong className={`text-lg block mb-1 ${statusColorMap[currentStatus as RenderableStatus].text}`}>
+                      {statusTextMap[currentStatus as RenderableStatus]}
+                    </Text>
+                    {currentStatus === "IN_PROGRESS" && (
+                      <Progress
+                        percent={Math.round(progress)}
+                        status={progress >= 100 ? "success" : "active"}
+                        strokeColor={statusColorMap[currentStatus as RenderableStatus].progress}
+                        className="mb-1"
+                      />
+                    )}
+                    <Text className="text-gray-600 text-sm">
+                      {statusWaitTextMap[currentStatus as RenderableStatus]}
+                    </Text>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Order Details */}
           <div className="mb-8">
             <Title level={5} className="mb-3">รายละเอียดการสั่งซื้อ</Title>
+            <div className="mb-2 flex flex-col gap-1">
+              <Text className="text-gray-600">หมายเลขออเดอร์: <Text strong className="text-blue-600">{orderDetails.orderId}</Text></Text>
+              <Text className="text-gray-600">เวลาสั่งซื้อ: <Text strong>{orderDetails.orderTime ? orderDetails.orderTime : new Date().toLocaleString('th-TH')}</Text></Text>
+            </div>
+            
             <div className="space-y-3">
               {orderDetails.items.map((item, index) => (
-                <div key={index} className="flex justify-between items-start py-2 border-b border-gray-100 last:border-0">
+                <div key={index} className="flex justify-between items-start py-2  last:border-0">
                   <div>
                     <Text strong>{item.name}</Text>
                     <div className="text-gray-500 text-sm">
@@ -188,16 +243,15 @@ const OrderSuccessStep: React.FC<OrderSuccessStepProps> = ({
           <div className="border-t border-gray-100 pt-6 text-center">
             <div className="bg-gradient-to-br from-gray-50 to-blue-50 p-6 -mx-6 mb-6">
               <div className="w-40 h-40 bg-white mx-auto border border-gray-200 flex items-center justify-center rounded-lg shadow-sm">
-                <img 
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
-                    JSON.stringify({
-                      orderId: orderDetails.orderId,
-                      totalItems: orderDetails.items.reduce((sum, item) => sum + item.quantity, 0),
-                      totalAmount: orderDetails.totalAmount
-                    })
-                  )}`} 
-                  alt="Order QR Code"
-                  className="w-32 h-32"
+                <QRCode
+                  value={JSON.stringify({
+                    orderId: orderDetails.orderId,
+                    totalItems: orderDetails.items.reduce((sum, item) => sum + item.quantity, 0),
+                    totalAmount: orderDetails.totalAmount
+                  })}
+                  size={128}
+                  bordered={false}
+                  bgColor="#fff"
                 />
               </div>
             </div>
@@ -211,16 +265,13 @@ const OrderSuccessStep: React.FC<OrderSuccessStepProps> = ({
                 type="primary"
                 icon={<QrcodeOutlined />}
                 onClick={() => {
-                  const link = document.createElement('a');
-                  link.href = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(
-                    JSON.stringify({
-                      orderId: orderDetails.orderId,
-                      totalItems: orderDetails.items.reduce((sum, item) => sum + item.quantity, 0),
-                      totalAmount: orderDetails.totalAmount
-                    })
-                  )}`;
-                  link.download = `order-${orderDetails.orderId}.png`;
-                  link.click();
+                  const canvas = document.querySelector('.ant-qrcode canvas') as HTMLCanvasElement;
+                  if (canvas) {
+                    const link = document.createElement('a');
+                    link.href = canvas.toDataURL('image/png');
+                    link.download = `order-${orderDetails.orderId}.png`;
+                    link.click();
+                  }
                 }}
               >
                 ดาวน์โหลด QR Code

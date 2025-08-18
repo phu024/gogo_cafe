@@ -82,7 +82,7 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
           </div>
         </div>
         <Badge count={getTotalItems()} className="cart-badge">
-          <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
+          <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg">
             <ShoppingCartOutlined className="text-2xl text-blue-600" />
           </div>
         </Badge>

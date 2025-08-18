@@ -408,7 +408,7 @@ export const sampleOrders: Order[] = [
         id: "GOGO-240115-006",
         User: users[4],
         total_amount: 400,
-        order_status: "PENDING",
+        order_status: "WAITING",
         payment_method: "CREDIT_CARD",
         payment_status: "COMPLETED",    
         order_time: new Date("2024-01-15T15:00:00Z"),
@@ -449,7 +449,7 @@ export const sampleOrders: Order[] = [
         id: "GOGO-240115-007",
         User: users[2],
         total_amount: 120,
-        order_status: "PENDING",
+        order_status: "WAITING",
         payment_method: "CASH",
         payment_status: "PENDING",
         order_time: new Date("2025-01-15T15:10:00Z"),
@@ -490,26 +490,6 @@ export const sampleOrders: Order[] = [
             }
         ]
     },
-    // Hidden from normal barista tabs (UN_PAYMENT & CANCELED)
-    {
-        id: "GOGO-240115-009",
-        User: users[1],
-        total_amount: 75,
-        order_status: "UN_PAYMENT",
-        payment_method: "CASH",
-        payment_status: "PENDING",
-        order_time: new Date("2024-01-15T15:30:00Z"),
-        notes: "ลูกค้าจะจ่ายหน้าร้าน",
-        items: [
-            {
-                id: 21,
-                menu_item: menuItems[2],
-                toppings: [],
-                quantity: 1,
-                total_price: 75
-            }
-        ]
-    },
     {
         id: "GOGO-240115-010",
         User: users[0],
@@ -536,7 +516,7 @@ export const sampleOrders: Order[] = [
         id: "GOGO-240115-011",
         User: users[2],
         total_amount: 60,
-        order_status: "PENDING",
+        order_status: "WAITING",
         payment_method: "CASH",
         payment_status: "PENDING",
         order_time: new Date(now.getTime() - 16 * 60 * 1000), // 16 minutes ago
@@ -548,7 +528,7 @@ export const sampleOrders: Order[] = [
         id: "GOGO-240115-012",
         User: users[1],
         total_amount: 45,
-        order_status: "PENDING",
+        order_status: "WAITING",
         payment_method: "CASH",
         payment_status: "PENDING",
         order_time: new Date(now.getTime() - 4 * 60 * 1000), // 4 minutes ago
@@ -560,7 +540,7 @@ export const sampleOrders: Order[] = [
         id: "GOGO-240115-013",
         User: users[0],
         total_amount: 50,
-        order_status: "PENDING",
+        order_status: "WAITING",
         payment_method: "CASH",
         payment_status: "PENDING",
         order_time: new Date(now.getTime() - 30 * 1000), // 30 seconds ago

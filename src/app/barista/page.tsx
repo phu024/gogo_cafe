@@ -36,7 +36,7 @@ const { Search } = Input;
 const { RangePicker } = DatePicker;
 
 const TABBED_STATUSES: OrderStatus[] = [
-  "PENDING",
+  "WAITING",
   "IN_PROGRESS",
   "READY",
   "COMPLETED",
@@ -119,14 +119,14 @@ const BaristaPage: React.FC = () => {
       setDateRange(null);
     }
   };
-  const allTabOrders = byStatus("PENDING")
+  const allTabOrders = byStatus("WAITING")
     .concat(byStatus("IN_PROGRESS"))
     .concat(byStatus("READY"))
     .concat(byStatus("COMPLETED"))
     .concat(byStatus("CANCELED")); // เพิ่ม CANCELED
 
   const statusOrder = {
-    PENDING: 1,
+    WAITING: 1,
     IN_PROGRESS: 2,
     READY: 3,
     COMPLETED: 4,
@@ -134,7 +134,7 @@ const BaristaPage: React.FC = () => {
   } as const;
 
   const allTabFiltered = allTabOrders
-    .filter(order => order.order_status !== "UN_PAYMENT") // ไม่กรอง CANCELED แล้ว
+    .filter(order => order.order_status !== "CANCELED") // ไม่กรอง WAITING แล้ว
     .sort((a, b) => {
       // เรียงตามลำดับสถานะก่อน
       const aStatus = statusOrder[a.order_status as keyof typeof statusOrder] ?? 99;
@@ -187,7 +187,7 @@ const BaristaPage: React.FC = () => {
   const statusTabs = TABBED_STATUSES.map((status) => {
     let emptyMessage;
     switch (status) {
-      case "PENDING":
+      case "WAITING":
         emptyMessage = "ไม่มีรายการที่รอดำเนินการ";
         break;
       case "IN_PROGRESS":

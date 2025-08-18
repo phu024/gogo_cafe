@@ -20,12 +20,11 @@ export interface StatusViewConfig {
 
 // Constant configurations
 const STATUS_ICONS: Record<OrderStatus, React.ReactNode> = {
-  PENDING: React.createElement(ClockCircleOutlined),
+  WAITING: React.createElement(ClockCircleOutlined),
   IN_PROGRESS: React.createElement(CoffeeOutlined),
   READY: React.createElement(CheckCircleOutlined),
   COMPLETED: React.createElement(CheckOutlined),
-  CANCELED: null,
-  UN_PAYMENT: null
+  CANCELED: null
 };
 
 interface UseBaristaOrdersOptions {
