@@ -22,7 +22,7 @@ export default function LandingPage() {
     if (user.role_id.name === 'Barista' || user.role_id.name === 'Manager') {
       router.push('/barista');
     } else {
-      router.push('/order');
+      router.push('/customer/order');
     }
   };
 

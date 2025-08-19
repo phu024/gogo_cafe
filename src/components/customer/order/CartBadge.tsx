@@ -23,7 +23,7 @@ const CartBadge: React.FC<CartBadgeProps> = React.memo(({
         className="min-w-[120px]"
         aria-label={`ตะกร้า (${cartCount} รายการ)`}
       >
-        ตะกร้า ({cartCount})
+        ตะกร้า
       </Button>
     </Badge>
   </div>

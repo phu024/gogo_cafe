@@ -6,7 +6,7 @@ import {
   CreditCardOutlined, 
   QrcodeOutlined 
 } from '@ant-design/icons';
-import { useOrderProgressLogic } from '@/hooks/useOrderProgress';
+import { useOrderProgressLogic } from '@/hooks/useCustomerOrderProgress';
 
 type OrderStep = "menu" | "cart" | "payment" | "success";
 

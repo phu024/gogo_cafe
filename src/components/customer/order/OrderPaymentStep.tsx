@@ -6,7 +6,7 @@ import {
   QrcodeOutlined,
 } from "@ant-design/icons";
 import { CartItem } from "@/types";
-import { useOrderPaymentLogic } from '@/hooks/useOrderPayment';
+import { useOrderPaymentLogic } from '@/hooks/useCustomerOrderPayment';
 
 const { Title, Text } = Typography;
 

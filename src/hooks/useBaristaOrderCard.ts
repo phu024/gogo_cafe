@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import dayjs from 'dayjs';
 import type { Order } from '@/types';
 
-export function useOrderCardLogic(order: Order, isExpanded: boolean) {
+export function useBaristaOrderCardLogic(order: Order, isExpanded: boolean) {
   const MAX_ITEMS_TO_SHOW = 3;
 
   const { itemLines, hiddenCount } = useMemo(() => {

@@ -1,8 +1,8 @@
 import React from "react";
 import { Typography, Card, Button, Space, Progress, QRCode, notification } from "antd";
 import { QrcodeOutlined, CoffeeOutlined } from "@ant-design/icons";
-import { OrderStatus } from "../../types";
-import { useOrderSuccessLogic } from '@/hooks/useOrderSuccess';
+import { OrderStatus } from "../../../types";
+import { useOrderSuccessLogic } from '@/hooks/useCustomerOrderSuccess';
 
 const { Title, Text } = Typography;
 

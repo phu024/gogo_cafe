@@ -10,7 +10,7 @@ import {
   EditOutlined
 } from "@ant-design/icons";
 import { CartItem } from "@/types";
-import { useOrderCartLogic } from '@/hooks/useOrderCart';
+import { useOrderCartLogic } from '@/hooks/useCustomerOrderCart';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -67,7 +67,7 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
         <div className="flex items-center gap-4">
           <div>
             <Title level={2} className="mb-1 text-gray-900">
-              <ShoppingCartOutlined className="text-4xl text-blue-500 mr-4" />
+              {/* <ShoppingCartOutlined className="text-4xl text-blue-500 mr-4" /> */}
               ตะกร้าสินค้าของคุณ
             </Title>
             <Paragraph className="text-gray-600 text-base mb-0">

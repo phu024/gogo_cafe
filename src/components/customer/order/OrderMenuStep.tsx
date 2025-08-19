@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography, Card, Row, Col, Button, Space, Divider, Tag } from 'antd';
 import { CoffeeOutlined, PlusOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { MenuCategory, MenuItem } from '@/types';
-import { useOrderMenuLogic } from '@/hooks/useOrderMenu';
+import { useOrderMenuLogic } from '@/hooks/useCustomerOrderMenu';
 
 const { Title, Text, Paragraph } = Typography;
 

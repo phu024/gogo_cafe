@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import { ShoppingCart, Clock, Coffee, User, Clipboard } from "lucide-react";
+import { Clock, Coffee, User, Clipboard,House  } from "lucide-react";
 
 export interface NavItem {
   href: string;
@@ -12,13 +12,13 @@ export interface NavItem {
 const ROLE_NAVIGATION: Record<string, NavItem[]> = {
   Customer: [
     {
-      href: "/order",
-      label: "สั่งซื้อ",
-      icon: ShoppingCart,
+      href: "/customer/order",
+      label: "หน้าแรก",
+      icon: House,
       roles: ['Customer']
     },
     {
-      href: "/history",
+      href: "/customer/history",
       label: "ประวัติการสั่งซื้อ",
       icon: Clock,
       roles: ['Customer']

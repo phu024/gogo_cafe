@@ -1,7 +1,8 @@
 import React from 'react';
 import { Modal, Typography, InputNumber, Input, Divider, Slider, Checkbox } from 'antd';
 import { MenuItem, Topping } from '@/types';
-import { useAddToCartModalLogic } from '@/hooks/useAddToCartModal';
+import { useAddToCartModalLogic } from '@/hooks/useCustomerAddToCartModal';
+
 
 const { Text } = Typography;
 
@@ -36,12 +37,15 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
   sugarLevel,
   onSugarLevelChange,
 }) => {
-  const { qtyError, validateQty, getTotalPrice } = useAddToCartModalLogic(isVisible, selectedItem, selectedToppings, quantity);
+  const { qtyError, validateQty, getTotalPrice, } = useAddToCartModalLogic(isVisible, selectedItem, selectedToppings, quantity);
 
   const handleOk = () => {
     if (validateQty(quantity)) onOk();
   };
 
+  if (!selectedItem) {
+    return null; // Don't render modal if no item is selected
+  }
   return (
     <Modal
       title={selectedItem ? `สั่งซื้อ: ${selectedItem.name}` : 'สั่งซื้อสินค้า'}

@@ -3,10 +3,12 @@ import type { MenuItem, Topping } from '@/types';
 
 export function useAddToCartModalLogic(isVisible: boolean, selectedItem: MenuItem | null, selectedToppings: Topping[], quantity: number) {
   const [qtyError, setQtyError] = useState<string | null>(null);
+  
 
   useEffect(() => {
     if (!isVisible) setQtyError(null);
   }, [isVisible]);
+
 
   const validateQty = useCallback((val: number) => {
     if (!Number.isFinite(val) || val < 1) {

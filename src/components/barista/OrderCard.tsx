@@ -5,7 +5,7 @@ import { FileTextOutlined } from "@ant-design/icons";
 import type { Order, OrderStatus } from "@/types";
 import type { StatusViewConfig } from "@/hooks/useBaristaOrders";
 import dayjs from "dayjs";
-import { useOrderCardLogic } from '@/hooks/useOrderCard';
+import { useBaristaOrderCardLogic } from '@/hooks/useBaristaOrderCard';
 
 export interface NextAction {
   to: OrderStatus;
@@ -35,7 +35,7 @@ export const OrderCard: React.FC<OrderCardProps> = React.memo(
     isExpanded,
     onToggleExpand,
   }) => {
-    const { itemLines, hiddenCount, badgeType } = useOrderCardLogic(order, isExpanded);
+    const { itemLines, hiddenCount, badgeType } = useBaristaOrderCardLogic(order, isExpanded);
 
     return (
       <Card

@@ -17,7 +17,7 @@ import {
   AddToCartModal,
   OrderProgressSteps,
   CartBadge
-} from "@/components/order";
+} from "@/components/customer/order";
 
 const { Content } = Layout;
 
