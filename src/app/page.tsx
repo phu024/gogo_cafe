@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { users } from '@/lib/mock-data';
+import { users } from '@/shared/utils/mock-data';
 import { useRouter } from 'next/navigation';
 import { Select, Button } from 'antd';
 import 'antd/dist/reset.css';

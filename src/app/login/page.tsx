@@ -1,6 +1,6 @@
 "use client";
 import { useState, useTransition, useCallback } from "react";
-import { users, roles } from "@/lib/mock-data";
+import { users, roles } from "@/shared/utils/mock-data";
 import { useRouter } from "next/navigation";
 import { Button } from "antd";
 

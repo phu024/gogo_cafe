@@ -6,9 +6,10 @@ import {
   menuCategories as mockMenuCategories, 
   menuItems as mockMenuItems, 
   toppings as mockToppings 
-} from "@/lib/mock-data";
+} from "@/shared/utils/mock-data";
 import type { MenuCategory, MenuItem, Topping, CartItem, OrderStatus } from "@/types";
-import Header from "@/components/header";
+import { calcItemTotalPrice } from '@/shared/utils/utils';
+import Header from "@/presentation/components/shared/header";
 import {
   OrderMenuStep,
   OrderCartStep,
@@ -17,7 +18,9 @@ import {
   AddToCartModal,
   OrderProgressSteps,
   CartBadge
-} from "@/components/customer/order";
+} from "@/presentation/components/customer/order";
+import { useOrderCartLogic } from '@/presentation/hooks/legacy/useCustomerOrderCart';
+import { generateOrderId } from '@/shared/utils/utils';
 
 const { Content } = Layout;
 
@@ -62,7 +65,7 @@ const useOrderManagement = () => {
   const handleAddToCart = useCallback(() => {
     if (!selectedItem) return;
 
-    const totalPrice = calculateTotalPrice(selectedItem, selectedToppings, quantity);
+    const totalPrice = calcItemTotalPrice(selectedItem, selectedToppings, quantity);
     const newItem: CartItem = {
       id: Date.now(),
       menu_item: selectedItem,
@@ -81,8 +84,7 @@ const useOrderManagement = () => {
   const handleQuantityUpdate = useCallback((itemId: number, newQuantity: number) => {
     setCart(prev => prev.map(item => {
       if (item.id === itemId) {
-        const newTotalPrice = (item.menu_item.base_price + 
-          item.toppings.reduce((sum, t) => sum + t.price, 0)) * newQuantity;
+        const newTotalPrice = calcItemTotalPrice(item.menu_item, item.toppings, newQuantity);
         return { ...item, quantity: newQuantity, total_price: newTotalPrice };
       }
       return item;
@@ -130,20 +132,7 @@ const useOrderManagement = () => {
   };
 };
 
-const calculateTotalPrice = (item: MenuItem, toppings: Topping[], quantity: number): number => {
-  const basePrice = item.base_price;
-  const toppingsPrice = toppings.reduce((sum, t) => sum + t.price, 0);
-  return (basePrice + toppingsPrice) * quantity;
-};
-
-const generateOrderId = () => {
-  const date = new Date();
-  const year = date.getFullYear().toString().slice(-2);
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-  const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-  return `GO${year}${month}${day}${random}`;
-};
+// moved to utils: calcItemTotalPrice, generateOrderId
 
 const OrderPage: React.FC = () => {
   const router = useRouter();
@@ -177,6 +166,8 @@ const OrderPage: React.FC = () => {
     resetModalState
   } = useOrderManagement();
 
+  const { totalItems } = useOrderCartLogic(cart);
+
   const handleItemSelect = useCallback((item: MenuItem) => {
     setSelectedItem(item);
     setIsModalVisible(true);
@@ -196,7 +187,7 @@ const OrderPage: React.FC = () => {
   }, [setCurrentStep, setOrderStatus]);
 
   const resetOrder = useCallback(() => {
-    router.push('/order');
+    router.push('/customer/order');
     setCurrentStep("menu");
     setSelectedCategory(null);
     setCart([]);
@@ -274,7 +265,7 @@ const OrderPage: React.FC = () => {
 
           {currentStep === "menu" && (
             <CartBadge 
-              cartCount={cart.length} 
+              cartCount={totalItems} 
               onCartClick={handleCartClick} 
             />
           )}

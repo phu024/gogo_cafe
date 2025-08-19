@@ -4,7 +4,7 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import "antd/dist/reset.css";
-import Header from "@/components/header";
+import Header from "@/presentation/components/shared/header";
 
 export const metadata: Metadata = {
   title: "GOGO CAFE - Smart Order System",

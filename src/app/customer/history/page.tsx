@@ -4,10 +4,10 @@ import { Layout, Typography, Card, Empty, Input, DatePicker, Button, Tag, Space 
 import { SearchOutlined, ReloadOutlined } from '@ant-design/icons';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import dayjs from 'dayjs';
-import Header from '@/components/header';
-import { sampleOrders, users } from '@/lib/mock-data';
+import Header from '@/presentation/components/shared/header';
+import { sampleOrders, users } from '@/shared/utils/mock-data';
 import { Order, User } from '@/types';
-import { ORDER_STATUS_CONFIG } from '@/config/orderStatus';
+import { ORDER_STATUS_CONFIG } from '@/shared/constants/orderStatus';
 
 const { Title, Text } = Typography;
 const { Content } = Layout;

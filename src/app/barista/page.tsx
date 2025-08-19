@@ -19,16 +19,16 @@ import {
   CoffeeOutlined,
 } from "@ant-design/icons";
 import type { RangePickerProps } from "antd/es/date-picker";
-import Header from "@/components/header";
-import { sampleOrders } from "@/lib/mock-data";
-import OrderCard from "@/components/barista/OrderCard";
-import { useBaristaOrders } from "@/hooks/useBaristaOrders";
-import { ORDER_STATUS_CONFIG } from "@/config/orderStatus";
+import Header from "@/presentation/components/shared/header";
+import { sampleOrders } from "@/shared/utils/mock-data";
+import OrderCard from "@/presentation/components/barista/OrderCard";
+import { useBaristaOrders } from "@/presentation/hooks/legacy/useBaristaOrders";
+import { ORDER_STATUS_CONFIG } from "@/shared/constants/orderStatus";
 import type { OrderStatus } from "@/types";
-import CurrentTime from "@/components/barista/CurrentTime";
-import StatisticsCard from "@/components/barista/StatisticsCard";
+import CurrentTime from "@/presentation/components/barista/CurrentTime";
+import StatisticsCard from "@/presentation/components/barista/StatisticsCard";
 import dayjs from "dayjs";
-import BaristaStatistics from "@/components/barista/BaristaStatistics";
+import BaristaStatistics from "@/presentation/components/barista/BaristaStatistics";
 
 const { Text, Title } = Typography;
 const { Content } = Layout;
