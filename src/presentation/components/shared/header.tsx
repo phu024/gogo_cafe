@@ -79,7 +79,7 @@ const Header: React.FC = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-2" role="navigation" aria-label="เมนูหลัก">
+            <nav className="hidden md:flex items-center gap-2 flex-1 justify-end" role="navigation" aria-label="เมนูหลัก">
               {navigationItems.map(item => {
                 const Icon = item.icon;
                 return (
