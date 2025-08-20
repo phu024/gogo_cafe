@@ -154,7 +154,6 @@ const BaristaPage: React.FC = () => {
 
   // เรียงลำดับ: กลุ่มตามสถานะ -> เวลาออเดอร์ (เก่าก่อน)
   const allTabFiltered = allTabOrders
-    .filter(order => order.order_status !== "CANCELED")
     .sort((a, b) => {
       // เรียงตามลำดับสถานะก่อน
       const aStatus = statusOrder[a.order_status as keyof typeof statusOrder] ?? 99;

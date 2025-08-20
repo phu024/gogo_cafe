@@ -39,27 +39,27 @@ const renderableStatuses = ["WAITING", "ACCEPTED", "READY", "COMPLETED", "CANCEL
 type RenderableStatus = typeof renderableStatuses[number];
 
 const statusColorMap: Record<RenderableStatus, { bg: string; border: string; iconBg: string; icon: string; text: string; progress: string }> = {
-  WAITING: { bg: "bg-yellow-50", border: "border-yellow-300", iconBg: "bg-yellow-100", icon: "text-yellow-600", text: "text-yellow-700", progress: "#FACC15" },
-  ACCEPTED: { bg: "bg-blue-50", border: "border-blue-300", iconBg: "bg-blue-100", icon: "text-blue-600", text: "text-blue-700", progress: "#3B82F6" },
+  WAITING: { bg: "bg-blue-50", border: "border-blue-300", iconBg: "bg-blue-100", icon: "text-blue-600", text: "text-blue-700", progress: "#3B82F6" },
+  ACCEPTED: { bg: "bg-orange-50", border: "border-orange-300", iconBg: "bg-orange-100", icon: "text-orange-600", text: "text-orange-700", progress: "#F97316" },
   READY: { bg: "bg-green-50", border: "border-green-300", iconBg: "bg-green-100", icon: "text-green-600", text: "text-green-700", progress: "#22C55E" },
-  COMPLETED: { bg: "bg-green-50", border: "border-green-300", iconBg: "bg-green-100", icon: "text-green-600", text: "text-green-700", progress: "#22C55E" },
+  COMPLETED: { bg: "bg-gray-50", border: "border-gray-300", iconBg: "bg-gray-100", icon: "text-gray-600", text: "text-gray-700", progress: "#6B7280" },
   CANCELED: { bg: "bg-red-50", border: "border-red-300", iconBg: "bg-red-100", icon: "text-red-600", text: "text-red-700", progress: "#EF4444" },
 };
 
 const statusTextMap: Record<RenderableStatus, string> = {
-  WAITING: "รอคิว",
-  ACCEPTED: "กำลังเตรียม/ชงเครื่องดื่ม",
-  READY: "พร้อมรับที่เคาน์เตอร์",
-  COMPLETED: "รับเครื่องดื่มแล้ว",
-  CANCELED: "ออเดอร์ถูกยกเลิก",
+  WAITING: "อยู่ในคิว",
+  ACCEPTED: "กำลังเตรียม",
+  READY: "พร้อมรับแล้ว",
+  COMPLETED: "รับแล้ว",
+  CANCELED: "ยกเลิกแล้ว",
 };
 
 const statusWaitTextMap: Record<RenderableStatus, string> = {
-  WAITING: "รอคิวก่อนเริ่มเตรียมเครื่องดื่ม",
-  ACCEPTED: "เวลารอโดยประมาณ 5-7 นาที",
-  READY: "พร้อมรับได้ทันที กรุณานำ QR Code ไปรับเครื่องดื่มที่เคาน์เตอร์",
-  COMPLETED: "ขอบคุณที่ใช้บริการ GOGO CAFE",
-  CANCELED: "ออเดอร์ถูกยกเลิก",
+  WAITING: "กำลังรอคิวเพื่อเริ่มเตรียมเครื่องดื่ม",
+  ACCEPTED: "กำลังเตรียมเครื่องดื่ม ใช้เวลาประมาณ 5-7 นาที",
+  READY: "เครื่องดื่มของคุณพร้อมแล้ว! กรุณาแสดง QR Code เพื่อรับที่เคาน์เตอร์",
+  COMPLETED: "ขอบคุณที่ใช้บริการ GOGO CAFE หวังว่าจะได้พบกันใหม่!",
+  CANCELED: "ออเดอร์ของคุณถูกยกเลิกเรียบร้อยแล้ว",
 };
 
 const OrderSuccessStep: React.FC<OrderSuccessStepProps> = ({
@@ -151,7 +151,7 @@ const OrderSuccessStep: React.FC<OrderSuccessStepProps> = ({
           <div className="mb-6">
             <div className="text-center">
               <div className="flex items-center justify-center mb-4">
-                <QrcodeOutlined className="text-xl text-blue-500 mr-2" />
+                {/* <QrcodeOutlined className="text-xl text-blue-500 mr-2" /> */}
                 <Title level={4} className="mb-0">QR Code สำหรับรับเครื่องดื่ม</Title>
               </div>
               
@@ -213,15 +213,15 @@ const OrderSuccessStep: React.FC<OrderSuccessStepProps> = ({
             </div>
             
             <div className="space-y-2">
-              <div className="flex justify-between items-center p-2 bg-gray-50 rounded">
+              <div className="flex justify-between items-center p-2">
                 <Text className="text-gray-600">เวลาสั่งซื้อ:</Text>
                 <Text strong>{displayOrderTime}</Text>
               </div>
-              <div className="flex justify-between items-center p-2 bg-gray-50 rounded">
+              <div className="flex justify-between items-center p-2">
                 <Text className="text-gray-600">จำนวนรายการ:</Text>
                 <Text strong>{orderDetails.items.reduce((sum, item) => sum + item.quantity, 0)} รายการ</Text>
               </div>
-              <div className="flex justify-between items-center p-2 bg-gray-50 rounded ">
+              <div className="flex justify-between items-center p-2">
                 <Text className="text-gray-600">ยอดรวม:</Text>
                 <Text strong className="text-xl text-green-600">
                   ฿{formatCurrencyTH(orderDetails.totalAmount)}

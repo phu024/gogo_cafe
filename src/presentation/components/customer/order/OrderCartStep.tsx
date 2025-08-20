@@ -5,7 +5,7 @@ import {
   DeleteOutlined,
   ArrowLeftOutlined,
   EditOutlined,
-  DollarOutlined,
+  CreditCardOutlined,
   CalculatorOutlined,
   ShoppingOutlined,
   FileTextOutlined,
@@ -129,7 +129,7 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
 
   // Cart item component
   const CartItemComponent = ({ item }: { item: CartItem }) => (
-    <div className="border-b border-gray-300 pb-4 mb-4 last:border-b-0">
+    <div className="bg-gray-50 rounded-lg p-4 mb-4 border-b border-gray-300 last:border-b-0">
       {/* Item Header */}
       <div className="mb-3">
         <Title level={4} className="mb-0">
@@ -259,15 +259,15 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
       >
         เพิ่มเมนู
       </Button>
-      <Button
-        type="primary"
-        size="large"
-        icon={<DollarOutlined />}
-        onClick={onCheckout}
-        className="h-12 px-8 text-lg bg-gradient-to-r from-green-500 to-emerald-600 border-0"
-      >
-        ดำเนินการชำระเงิน
-      </Button>
+              <Button
+          type="primary"
+          size="large"
+          icon={<CreditCardOutlined />}
+          onClick={onCheckout}
+          className="h-12 px-8 text-lg bg-gradient-to-r from-green-500 to-emerald-600 border-0"
+        >
+          ดำเนินการชำระเงิน
+        </Button>
     </div>
   );
 

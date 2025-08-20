@@ -24,54 +24,54 @@ const ORDER_WORKFLOW: Partial<Record<OrderStatus, OrderStatus>> = {
 export const ORDER_STATUS_CONFIG: Record<OrderStatus, OrderStatusConfigItem> = {
   WAITING: { 
     key: 'WAITING',      
-    labelTh: 'รอคิว',
+    labelTh: 'ใหม่',
     labelEn: 'Waiting',     
-    color: '#facc15', 
-    showInTabs: true,  
-    active: true,
-    next: ORDER_WORKFLOW['WAITING'],
-    nextAction: 'เริ่มเตรียมเครื่องดื่ม',
-    description: 'ออเดอร์อยู่ในคิวรอการเตรียมหลังจากชำระเงินแล้ว'
-  },
-  ACCEPTED: { 
-    key: 'ACCEPTED',  
-    labelTh: 'กำลังดำเนินการ',
-    labelEn: 'In Progress',  
     color: '#3b82f6', 
     showInTabs: true,  
     active: true,
+    next: ORDER_WORKFLOW['WAITING'],
+    nextAction: 'รับออเดอร์',
+    description: 'ออเดอร์ใหม่เข้ามา โปรดกด "รับออเดอร์" เพื่อเริ่มทำ'
+  },
+  ACCEPTED: { 
+    key: 'ACCEPTED',  
+    labelTh: 'กำลังทำ',
+    labelEn: 'In Progress',  
+    color: '#f97316', 
+    showInTabs: true,  
+    active: true,
     next: ORDER_WORKFLOW['ACCEPTED'],
-    nextAction: 'ดำเนินการเสร็จสิ้น',
-    description: 'บาริสตากำลังเตรียมเครื่องดื่ม'
+    nextAction: 'ทำเสร็จแล้ว',
+    description: 'ออเดอร์กำลังอยู่ในขั้นตอนการเตรียม'
   },
   READY: { 
     key: 'READY',        
-    labelTh: 'พร้อมเสิร์ฟ',
+    labelTh: 'เสร็จแล้ว',
     labelEn: 'Ready', 
     color: '#10b981', 
     showInTabs: true,  
     active: true,
     next: ORDER_WORKFLOW['READY'],
-    nextAction: 'เสิร์ฟให้ลูกค้า',
-    description: 'เครื่องดื่มพร้อมรับที่เคาน์เตอร์'
+    nextAction: 'ลูกค้ารับแล้ว',
+    description: 'เครื่องดื่มพร้อมเสิร์ฟ! รอให้ลูกค้ามารับที่เคาน์เตอร์'
   },
   COMPLETED: { 
     key: 'COMPLETED',    
-    labelTh: 'เสร็จสิ้น',
+    labelTh: 'สำเร็จ',
     labelEn: 'Completed', 
     color: '#6b7280', 
     showInTabs: true,  
     active: false,
-    description: 'ลูกค้าได้รับเครื่องดื่มแล้ว'
+    description: 'ลูกค้ารับเครื่องดื่มและออเดอร์เสร็จสมบูรณ์แล้ว'
   },
   CANCELED: { 
     key: 'CANCELED',     
     labelTh: 'ยกเลิก',
     labelEn: 'Canceled',   
     color: '#ef4444', 
-    showInTabs: false, 
+    showInTabs: true, 
     active: false,
-    description: 'ออเดอร์ถูกยกเลิก'
+    description: 'ออเดอร์นี้ถูกยกเลิก ไม่ต้องดำเนินการใดๆ'
   }
 };
 
