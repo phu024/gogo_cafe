@@ -29,7 +29,7 @@ const OrderMenuStep: React.FC<OrderMenuStepProps> = ({
     <div>
       <Title level={2} className="mb-6">เลือกเมนูเครื่องดื่ม</Title>
       <Paragraph className="text-gray-600 mb-8">
-        เลือกเมนูและชำระเงินเพื่อรับ QR Code
+        เลือกเมนูที่ต้องการและดำเนินการชำระเงินเพื่อรับ QR Code
       </Paragraph>
 
       {/* Category Tabs */}

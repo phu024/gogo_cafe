@@ -63,8 +63,8 @@ export function useBaristaOrders(initialOrders: Order[], options?: UseBaristaOrd
       if (stored) {
         try {
           setOrders(JSON.parse(stored));
-        } catch (e) {
-          console.error('Failed to parse stored orders:', e);
+        } catch {
+          // Silently handle parse errors for stored orders
         }
       }
     }
@@ -111,7 +111,7 @@ export function useBaristaOrders(initialOrders: Order[], options?: UseBaristaOrd
     const start = dayjs(order.order_time);
     const end = order.completed_time ? dayjs(order.completed_time) : dayjs();
     const mins = end.diff(start, 'minute');
-    return mins < 60 ? `${mins}m` : `${Math.floor(mins / 60)}h ${mins % 60}m`;
+    return mins < 60 ? `${mins} นาที` : `${Math.floor(mins / 60)} ชั่วโมง ${mins % 60} นาที`;
   }, []);
 
   const getStatusView = useCallback((status: OrderStatus): StatusViewConfig => {

@@ -1,2 +1,2 @@
 // Infrastructure Layer Exports
-export * from './repositories/MenuRepository';
+// Note: Repositories have been simplified to direct mock data usage

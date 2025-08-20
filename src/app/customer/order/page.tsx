@@ -77,23 +77,50 @@ const useOrderManagement = () => {
     };
 
     setCart(prev => [...prev, newItem]);
-    message.success('เพิ่มลงตะกร้าเรียบร้อย');
+    message.success('เพิ่มลงตะกร้าสินค้าเรียบร้อย');
     resetModalState();
   }, [selectedItem, selectedToppings, quantity, notes, sugarLevel, resetModalState]);
 
-  const handleQuantityUpdate = useCallback((itemId: number, newQuantity: number) => {
+  const handleQuantityUpdate = useCallback((itemId: number, quantity: number) => {
+    setCart(prev => prev.map(item => 
+      item.id === itemId 
+        ? { ...item, quantity, total_price: calcItemTotalPrice(item.menu_item, item.toppings, quantity) }
+        : item
+    ));
+  }, []);
+
+  const handleUpdateItem = useCallback((itemId: number, updates: Partial<CartItem>) => {
     setCart(prev => prev.map(item => {
       if (item.id === itemId) {
-        const newTotalPrice = calcItemTotalPrice(item.menu_item, item.toppings, newQuantity);
-        return { ...item, quantity: newQuantity, total_price: newTotalPrice };
+        const updatedItem = { ...item, ...updates };
+        
+        // Recalculate total price if quantity or toppings changed
+        if (updates.quantity !== undefined || updates.toppings !== undefined) {
+          const basePrice = item.menu_item.base_price;
+          const toppingsPrice = (updates.toppings || item.toppings).reduce(
+            (sum, topping) => sum + topping.price,
+            0
+          );
+          const quantity = updates.quantity || item.quantity;
+          updatedItem.total_price = (basePrice + toppingsPrice) * quantity;
+        }
+        
+        return updatedItem;
       }
       return item;
     }));
   }, []);
 
-  const handleRemoveItem = useCallback((itemId: number) => {
-    setCart(prev => prev.filter(item => item.id !== itemId));
-    message.success('ลบรายการเรียบร้อย');
+  const handleRemoveItem = useCallback((itemId: string) => {
+    setCart(prev => prev.filter(item => item.id.toString() !== itemId));
+    message.success('ลบรายการออกจากตะกร้าเรียบร้อย');
+  }, []);
+
+  const handleEditItem = useCallback((updatedItem: CartItem) => {
+    setCart(prev => prev.map(item => 
+      item.id === updatedItem.id ? updatedItem : item
+    ));
+    message.success('แก้ไขรายการเรียบร้อย');
   }, []);
 
   return {
@@ -127,7 +154,9 @@ const useOrderManagement = () => {
     // Actions
     handleAddToCart,
     handleQuantityUpdate,
+    handleUpdateItem,
     handleRemoveItem,
+    handleEditItem,
     resetModalState
   };
 };
@@ -161,8 +190,8 @@ const OrderPage: React.FC = () => {
     setNotes,
     setSugarLevel,
     handleAddToCart,
-    handleQuantityUpdate,
     handleRemoveItem,
+    handleEditItem,
     resetModalState
   } = useOrderManagement();
 
@@ -228,10 +257,11 @@ const OrderPage: React.FC = () => {
         return (
           <OrderCartStep
             cart={cart}
-            onQuantityUpdate={handleQuantityUpdate}
             onRemoveItem={handleRemoveItem}
             onCheckout={handleCheckout}
             onBackToMenu={() => setCurrentStep("menu")}
+            onEditItem={handleEditItem}
+            availableToppings={toppings}
           />
         );
       case "payment":
@@ -277,11 +307,12 @@ const OrderPage: React.FC = () => {
 
         <AddToCartModal
           isVisible={isModalVisible}
+          mode="add"
           selectedItem={selectedItem}
           selectedToppings={selectedToppings}
           quantity={quantity}
           notes={notes}
-          toppings={toppings}
+          availableToppings={toppings}
           onOk={handleAddToCart}
           onCancel={resetModalState}
           onToppingsChange={setSelectedToppings}

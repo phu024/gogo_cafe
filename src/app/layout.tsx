@@ -4,12 +4,12 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import "antd/dist/reset.css";
-import Header from "@/presentation/components/shared/header";
+
 
 export const metadata: Metadata = {
-  title: "GOGO CAFE - Smart Order System",
+  title: "GOGO CAFE - ระบบสั่งซื้อเครื่องดื่มออนไลน์",
   description:
-    "สั่งเครื่องดื่มออนไลน์ ไม่ต้องต่อแถว - Smart Café Order & Pickup System",
+    "สั่งเครื่องดื่มออนไลน์ ไม่ต้องต่อแถว - ระบบสั่งซื้อและรับเครื่องดื่มอัจฉริยะ",
   generator: "v0.app",
 };
 

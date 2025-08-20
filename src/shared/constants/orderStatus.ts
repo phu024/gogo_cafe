@@ -31,7 +31,7 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatus, OrderStatusConfigItem> = {
     active: true,
     next: ORDER_WORKFLOW['WAITING'],
     nextAction: 'เริ่มเตรียมเครื่องดื่ม',
-    description: 'Order is waiting in queue after payment'
+    description: 'ออเดอร์อยู่ในคิวรอการเตรียมหลังจากชำระเงินแล้ว'
   },
   ACCEPTED: { 
     key: 'ACCEPTED',  
@@ -42,18 +42,18 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatus, OrderStatusConfigItem> = {
     active: true,
     next: ORDER_WORKFLOW['ACCEPTED'],
     nextAction: 'ดำเนินการเสร็จสิ้น',
-    description: 'Order is being prepared by barista'
+    description: 'บาริสตากำลังเตรียมเครื่องดื่ม'
   },
   READY: { 
     key: 'READY',        
-    labelTh: 'พร้อมรับ',
+    labelTh: 'พร้อมเสิร์ฟ',
     labelEn: 'Ready', 
     color: '#10b981', 
     showInTabs: true,  
     active: true,
     next: ORDER_WORKFLOW['READY'],
-    nextAction: 'ส่งมอบให้ลูกค้า',
-    description: 'Order is ready for pickup'
+    nextAction: 'เสิร์ฟให้ลูกค้า',
+    description: 'เครื่องดื่มพร้อมรับที่เคาน์เตอร์'
   },
   COMPLETED: { 
     key: 'COMPLETED',    
@@ -62,7 +62,7 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatus, OrderStatusConfigItem> = {
     color: '#6b7280', 
     showInTabs: true,  
     active: false,
-    description: 'Order has been picked up by customer'
+    description: 'ลูกค้าได้รับเครื่องดื่มแล้ว'
   },
   CANCELED: { 
     key: 'CANCELED',     
@@ -71,7 +71,7 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatus, OrderStatusConfigItem> = {
     color: '#ef4444', 
     showInTabs: false, 
     active: false,
-    description: 'Order was canceled'
+    description: 'ออเดอร์ถูกยกเลิก'
   }
 };
 

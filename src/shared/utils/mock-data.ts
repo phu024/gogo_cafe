@@ -1,4 +1,4 @@
-import type { MenuCategory, MenuItem, Topping, Order, User, Role } from "../types/index";
+import type { MenuCategory, MenuItem, Topping, Order, User, Role } from "../../types/index";
 
 
 export const roles: Role[] = [

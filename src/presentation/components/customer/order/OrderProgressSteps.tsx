@@ -27,18 +27,18 @@ const STEPS_CONFIG: Record<OrderStep, StepConfig> = {
     icon: <CoffeeOutlined />
   },
   cart: {
-    title: "ตะกร้า",
-    description: "ตรวจสอบรายการ",
+    title: "ตะกร้าสินค้า",
+    description: "ตรวจสอบและแก้ไขรายการ",
     icon: <ShoppingCartOutlined />
   },
   payment: {
     title: "ชำระเงิน",
-    description: "เลือกวิธีชำระเงิน",
+    description: "เลือกวิธีชำระเงินที่ปลอดภัย",
     icon: <CreditCardOutlined />
   },
   success: {
     title: "เสร็จสิ้น",
-    description: "รับ QR Code",
+    description: "รับ QR Code สำหรับรับเครื่องดื่ม",
     icon: <QrcodeOutlined />
   }
 };

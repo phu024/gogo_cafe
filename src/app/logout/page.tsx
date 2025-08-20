@@ -17,5 +17,5 @@ export default function LogoutPage() {
       });
   }, [router]);
 
-  return <div>Logging out...</div>;
+  return <div>กำลังออกจากระบบ...</div>;
 }

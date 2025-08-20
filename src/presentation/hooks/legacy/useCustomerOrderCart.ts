@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import type { CartItem } from '@/types';
+import { CartItem } from '@/types';
 
-export function useOrderCartLogic(cart: CartItem[]) {
+export const useOrderCartLogic = (cart: CartItem[]) => {
   const totalAmount = useMemo(() => {
     return cart.reduce((sum, item) => sum + item.total_price, 0);
   }, [cart]);
@@ -14,4 +14,4 @@ export function useOrderCartLogic(cart: CartItem[]) {
     totalAmount,
     totalItems,
   };
-}
+};

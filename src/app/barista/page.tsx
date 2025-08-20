@@ -12,11 +12,11 @@ import {
   Input,
   DatePicker,
   Button,
+  notification,
 } from "antd";
 import {
   SearchOutlined,
   ReloadOutlined,
-  CoffeeOutlined,
 } from "@ant-design/icons";
 import type { RangePickerProps } from "antd/es/date-picker";
 import Header from "@/presentation/components/shared/header";
@@ -26,9 +26,7 @@ import { useBaristaOrders } from "@/presentation/hooks/legacy/useBaristaOrders";
 import { ORDER_STATUS_CONFIG } from "@/shared/constants/orderStatus";
 import type { OrderStatus } from "@/types";
 import CurrentTime from "@/presentation/components/barista/CurrentTime";
-import StatisticsCard from "@/presentation/components/barista/StatisticsCard";
 import dayjs from "dayjs";
-import BaristaStatistics from "@/presentation/components/barista/BaristaStatistics";
 
 const { Text, Title } = Typography;
 const { Content } = Layout;
@@ -44,6 +42,9 @@ const TABBED_STATUSES: OrderStatus[] = [
 ];
 
 const BaristaPage: React.FC = () => {
+  const [api, contextHolder] = notification.useNotification();
+  const [lastOrderCount, setLastOrderCount] = React.useState(0);
+  
   const {
     searchText,
     setSearchText,
@@ -74,11 +75,11 @@ const BaristaPage: React.FC = () => {
             <Badge count={orders.length} />
           </span>
         ),
-        children: (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {orders.length === 0 ? (
-              <Empty description={emptyMessage} className="col-span-full" />
-            ) : (
+                 children: (
+           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+             {orders.length === 0 ? (
+               <Empty description={emptyMessage} className="col-span-full" />
+             ) : (
               orders.map((order) => {
                 const nextAction = getNextAction(order);
                 return (
@@ -107,10 +108,26 @@ const BaristaPage: React.FC = () => {
       formatElapsed,
       getNextAction,
       getStatusView,
-      toggleExpand,
       updateStatus,
+      toggleExpand,
     ]
   );
+
+  React.useEffect(() => {
+    const waitingOrders = byStatus("WAITING");
+    const currentOrderCount = waitingOrders.length;
+    if (currentOrderCount > lastOrderCount && lastOrderCount > 0) {
+      const newOrders = currentOrderCount - lastOrderCount;
+      api.info({
+        message: `มีออเดอร์ใหม่ ${newOrders} รายการ`,
+        description: "กรุณาตรวจสอบออเดอร์ที่รอดำเนินการ",
+        duration: 5,
+        placement: 'topRight',
+      });
+      
+    }
+    setLastOrderCount(currentOrderCount);
+  }, [byStatus, lastOrderCount, api]);
 
   const handleDateRangeChange: RangePickerProps["onChange"] = (dates) => {
     if (dates) {
@@ -119,11 +136,13 @@ const BaristaPage: React.FC = () => {
       setDateRange(null);
     }
   };
+
+  // จัดกลุ่มและเรียงลำดับออเดอร์สำหรับ tab "ทั้งหมด"
   const allTabOrders = byStatus("WAITING")
     .concat(byStatus("ACCEPTED"))
     .concat(byStatus("READY"))
     .concat(byStatus("COMPLETED"))
-    .concat(byStatus("CANCELED")); // เพิ่ม CANCELED
+    .concat(byStatus("CANCELED"));
 
   const statusOrder = {
     WAITING: 1,
@@ -133,8 +152,9 @@ const BaristaPage: React.FC = () => {
     CANCELED: 5,
   } as const;
 
+  // เรียงลำดับ: กลุ่มตามสถานะ -> เวลาออเดอร์ (เก่าก่อน)
   const allTabFiltered = allTabOrders
-    .filter(order => order.order_status !== "CANCELED") // ไม่กรอง WAITING แล้ว
+    .filter(order => order.order_status !== "CANCELED")
     .sort((a, b) => {
       // เรียงตามลำดับสถานะก่อน
       const aStatus = statusOrder[a.order_status as keyof typeof statusOrder] ?? 99;
@@ -154,14 +174,11 @@ const BaristaPage: React.FC = () => {
         <Badge count={allTabFiltered.length} />
       </span>
     ),
-    children: (
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {allTabFiltered.length === 0 ? (
-          <Empty
-            description="ไม่มีรายการที่ต้องดำเนินการ"
-            className="col-span-full"
-          />
-        ) : (
+           children: (
+         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+           {allTabFiltered.length === 0 ? (
+             <Empty description="ไม่มีรายการออเดอร์" className="col-span-full" />
+           ) : (
           allTabFiltered.map((order) => {
             const nextAction = getNextAction(order);
             return (
@@ -191,10 +208,10 @@ const BaristaPage: React.FC = () => {
         emptyMessage = "ไม่มีรายการที่รอดำเนินการ";
         break;
       case "ACCEPTED":
-        emptyMessage = "ไม่มีรายการที่กำลังดำเนินการ";
+        emptyMessage = "ไม่มีรายการที่กำลังเตรียมเครื่องดื่ม";
         break;
       case "READY":
-        emptyMessage = "ไม่มีรายการที่ดำเนินการเสร็จ";
+        emptyMessage = "ไม่มีรายการที่พร้อมเสิร์ฟ";
         break;
       case "COMPLETED":
         emptyMessage = "ไม่มีรายการที่ส่งมอบแล้ว";
@@ -214,7 +231,8 @@ const BaristaPage: React.FC = () => {
 
   return (
     <Layout>
-      <Header />{" "}
+      <Header />
+      {contextHolder}
       <Content className="container mx-auto px-4 py-8">
         {" "}
         {/* Content Header */}
@@ -223,52 +241,52 @@ const BaristaPage: React.FC = () => {
             <div>
               {" "}
               <Title level={4} className="!mb-1">
-                การจัดการงานเครื่องดื่ม
+                จัดการออเดอร์เครื่องดื่ม
               </Title>
               <Text className="text-gray-600">
-                จัดการคิวและติดตามสถานะการดำเนินการเครื่องดื่ม
+                จัดการคิวและติดตามสถานะการเตรียมเครื่องดื่ม
               </Text>
             </div>{" "}
             <CurrentTime />
           </div>
         </div>
-        {/* Statistics Cards */}
-        {/* <BaristaStatistics byStatus={byStatus} /> */}
+
         {/* Filters Card */}
         <Card className="mb-5 shadow-sm">
-          <Row gutter={12} align="middle">
-            <Col xs={24} md={10} lg={8}>
-              <Search
-                placeholder="ค้นหาจากชื่อลูกค้าหรือเลขออเดอร์"
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-                prefix={<SearchOutlined />}
-                size="large"
-              />
-            </Col>
-            <Col xs={24} md={10} lg={6} className="mt-3 md:mt-0">
-              <RangePicker
-                value={dateRange}
-                onChange={handleDateRangeChange}
-                format="DD/MM/YYYY"
-                size="large"
-                className="w-full"
-                // เลือกได้ไม่เกินวันที่ปัจจุบัน
-                disabledDate={(current) =>
-                  current && current > dayjs().endOf("day")
-                }
-              />
-            </Col>
-            <Col xs={24} md={4} lg={10} className="mt-3 md:mt-0 text-right">
-              <Button
-                icon={<ReloadOutlined />}
-                onClick={resetFilters}
-                size="large"
-              >
-                ล้างตัวกรอง
-              </Button>
-            </Col>
-          </Row>
+                     <Row gutter={12} align="middle">
+             <Col xs={24} md={10} lg={8}>
+               <Search
+                 placeholder="ค้นหาจากชื่อลูกค้าหรือเลขออเดอร์"
+                 value={searchText}
+                 onChange={(e) => setSearchText(e.target.value)}
+                 prefix={<SearchOutlined />}
+                 size="large"
+               />
+             </Col>
+             <Col xs={24} md={10} lg={6} className="mt-3 md:mt-0">
+               <RangePicker
+                 value={dateRange}
+                 onChange={handleDateRangeChange}
+                 format="DD/MM/YYYY"
+                 size="large"
+                 className="w-full"
+                 // เลือกได้ไม่เกินวันที่ปัจจุบัน
+                 disabledDate={(current) =>
+                   current && current > dayjs().endOf("day")
+                 }
+               />
+             </Col>
+             <Col xs={24} md={4} lg={10} className="mt-3 md:mt-0 text-right">
+               <Button
+                 icon={<ReloadOutlined />}
+                 onClick={resetFilters}
+                 size="large"
+                 className="mr-2"
+               >
+                 ล้างตัวกรอง
+               </Button>
+             </Col>
+           </Row>
           <div className="mt-6">
             <Tabs
               activeKey={activeTab}

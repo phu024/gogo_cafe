@@ -42,7 +42,10 @@ export const OrderCard: React.FC<OrderCardProps> = React.memo(
         size="small"
         className="relative border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all h-full"
         bodyStyle={{ padding: 16, height: "100%" }}
-        style={{ borderLeft: `6px solid ${statusView.color}` }}
+        style={{ 
+          borderLeft: `8px solid ${statusView.color}`,
+          boxShadow: `0 2px 8px rgba(0,0,0,0.1), 0 0 0 1px ${statusView.color}20`
+        }}
         hoverable
       >
         <div className="flex flex-col h-full">
@@ -58,11 +61,14 @@ export const OrderCard: React.FC<OrderCardProps> = React.memo(
                 {/* BADGE DISPLAY */}
                 {badgeType === "new" && (
                   <AntdBadge
-                    count="งานใหม่"
+                    count="ออเดอร์ใหม่"
                     style={{
                       backgroundColor: "#22c55e",
                       color: "#fff",
-                      fontWeight: 500,
+                      fontWeight: 600,
+                      fontSize: "10px",
+                      padding: "0 8px",
+                      borderRadius: "12px",
                     }}
                   />
                 )}
@@ -72,24 +78,30 @@ export const OrderCard: React.FC<OrderCardProps> = React.memo(
                     style={{
                       backgroundColor: "#f59e42",
                       color: "#fff",
-                      fontWeight: 500,
+                      fontWeight: 600,
+                      fontSize: "10px",
+                      padding: "0 8px",
+                      borderRadius: "12px",
                     }}
                   />
                 )}
                 {badgeType === "late" && (
                   <AntdBadge
-                    count="เกินเวลา!"
+                    count="เกินเวลาที่กำหนด!"
                     style={{
                       backgroundColor: "#ef4444",
                       color: "#fff",
-                      fontWeight: 500,
+                      fontWeight: 600,
+                      fontSize: "10px",
+                      padding: "0 8px",
+                      borderRadius: "12px",
                     }}
                   />
                 )}
               </div>
               <div className="flex flex-col gap-1">
                 <span className="text-xs text-gray-400">
-                  สั่งเมื่อ:{" "}
+                  เวลาสั่งซื้อ:{" "}
                   {order.order_time
                     ? dayjs(order.order_time).format("DD/MM/YYYY HH:mm")
                     : "-"}

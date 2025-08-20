@@ -13,7 +13,7 @@ const ROLE_NAVIGATION: Record<string, NavItem[]> = {
   Customer: [
     {
       href: "/customer/order",
-      label: "หน้าแรก",
+      label: "สั่งซื้อเครื่องดื่ม",
       icon: House,
       roles: ['Customer']
     },
@@ -27,7 +27,7 @@ const ROLE_NAVIGATION: Record<string, NavItem[]> = {
   Barista: [
     {
       href: "/barista",
-      label: "รายการสั่งซื้อ",
+      label: "จัดการออเดอร์",
       icon: Coffee,
       roles: ['Barista']
     }
@@ -35,13 +35,13 @@ const ROLE_NAVIGATION: Record<string, NavItem[]> = {
   Manager: [
     {
       href: "/barista",
-      label: "รายการสั่งซื้อ",
+      label: "จัดการออเดอร์",
       icon: Coffee,
       roles: ['Manager']
     },
     {
       href: "/staff/reports",
-      label: "รายงาน",
+      label: "รายงานการขาย",
       icon: Clipboard,
       roles: ['Manager']
     },

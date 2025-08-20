@@ -17,7 +17,7 @@ const OrderHistoryPage: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [dateRange, setDateRange] = useState<[dayjs.Dayjs, dayjs.Dayjs] | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [, setCurrentUser] = useState<User | null>(null);
 
   // Get current user from cookie and load their orders
   useEffect(() => {
@@ -100,7 +100,7 @@ const OrderHistoryPage: React.FC = () => {
           <div className="mb-8">
             <Title level={2}>ประวัติการสั่งซื้อ</Title>
             <Text className="text-gray-600">
-              ดูประวัติการสั่งซื้อของคุณทั้งหมด
+              ดูประวัติการสั่งซื้อเครื่องดื่มของคุณทั้งหมด
             </Text>
           </div>
 
@@ -133,7 +133,7 @@ const OrderHistoryPage: React.FC = () => {
           {/* Orders List */}
           <div className="space-y-4">
             {filteredOrders.length === 0 ? (
-              <Empty description="ไม่พบรายการสั่งซื้อ" />
+              <Empty description="ไม่พบรายการสั่งซื้อในประวัติ" />
             ) : (
               filteredOrders.map((order) => (
                 <Card 

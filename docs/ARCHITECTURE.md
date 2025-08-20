@@ -1,138 +1,96 @@
-# GOGO CAFE - Clean Architecture
+# GOGO CAFE - ระบบสั่งซื้อเครื่องดื่มออนไลน์
 
 ## โครงสร้างโปรเจกต์
 
 ```
 src/
 ├── domain/                    # Domain Layer (Business Logic)
-│   ├── entities/             # Business Entities
-│   │   ├── Order.ts         # Order, OrderItem, MenuItem, Topping, etc.
-│   │   └── ...
-│   ├── value-objects/       # Value Objects
-│   │   ├── Price.ts         # Price value object with validation
-│   │   ├── Quantity.ts      # Quantity value object with validation
-│   │   └── ...
-│   └── services/            # Domain Services
-│       ├── OrderCalculationService.ts
-│       ├── OrderIdGenerator.ts
-│       └── ...
-├── application/              # Application Layer (Use Cases)
-│   └── use-cases/
-│       └── order/
-│           ├── AddItemToCartUseCase.ts
-│           ├── UpdateCartItemQuantityUseCase.ts
-│           ├── CreateOrderUseCase.ts
-│           └── ...
-├── infrastructure/           # Infrastructure Layer (External Concerns)
-│   └── repositories/
-│       ├── MenuRepository.ts
-│       └── ...
+│   └── entities/             # Business Entities
+│       └── Order.ts         # Order, OrderItem, MenuItem, Topping, etc.
 ├── presentation/             # Presentation Layer (UI/UX)
 │   ├── components/
 │   │   ├── shared/          # Reusable Components
-│   │   │   ├── OrderSummary.tsx
+│   │   │   ├── header.tsx
 │   │   │   └── ...
 │   │   ├── customer/        # Customer-specific Components
+│   │   │   └── order/
+│   │   │       ├── OrderMenuStep.tsx
+│   │   │       ├── OrderCartStep.tsx
+│   │   │       ├── OrderPaymentStep.tsx
+│   │   │       ├── OrderSuccessStep.tsx
+│   │   │       ├── AddToCartModal.tsx
+│   │   │       ├── ItemCustomizationModal.tsx
+│   │   │       └── ...
 │   │   └── barista/         # Barista-specific Components
-│   └── hooks/               # Custom Hooks
-│       ├── useOrderManagement.ts
-│       ├── useMenuManagement.ts
-│       └── ...
+│   └── hooks/               # Custom Hooks (Legacy)
+│       └── legacy/
+│           ├── useCustomerOrderCart.ts
+│           ├── useCustomerOrderMenu.ts
+│           ├── useCustomerAddToCartModal.ts
+│           └── ...
 ├── shared/                   # Shared Resources
 │   ├── constants/
 │   │   ├── orderStatus.ts
+│   │   ├── navigation.ts
 │   │   └── ...
 │   └── utils/
+│       ├── mock-data.ts
+│       ├── utils.ts
 │       └── ...
+├── types/                    # TypeScript Type Definitions
+│   └── index.ts
 └── app/                      # Next.js App Router
     ├── customer/
+    │   ├── order/
+    │   │   └── page.tsx     # Main order page with local state management
+    │   └── history/
+    │       └── page.tsx
     ├── barista/
-    └── ...
+    │   └── page.tsx
+    └── page.tsx             # Landing page
 ```
 
-## หลักการ Clean Architecture
+## สถาปัตยกรรมระบบ
 
-### 1. Domain Layer (Core Business Logic)
-- **Entities**: Business objects (Order, MenuItem, etc.)
-- **Value Objects**: Immutable objects with validation (Price, Quantity)
-- **Domain Services**: Business logic that doesn't belong to entities
+ระบบนี้ใช้ Clean Architecture แบ่งเป็น 4 ชั้นหลัก:
 
-### 2. Application Layer (Use Cases)
-- **Use Cases**: Application-specific business rules
-- **Interfaces**: Contracts between layers
-- **DTOs**: Data Transfer Objects
+### 1. Domain Layer
+- **หน้าที่**: เก็บ Business Logic และ Business Rules
+- **ไฟล์**: `src/domain/entities/Order.ts`
+- **ประกอบด้วย**: Order, OrderItem, MenuItem, Topping และ Business Rules
 
-### 3. Infrastructure Layer (External Concerns)
-- **Repositories**: Data access implementations
-- **External Services**: APIs, databases, etc.
-- **Adapters**: Convert external data to domain objects
+### 2. Application Layer
+- **หน้าที่**: จัดการ Use Cases และ Application Logic
+- **ไฟล์**: `src/application/`
+- **ประกอบด้วย**: Use Cases สำหรับการสั่งซื้อ, จัดการออเดอร์
 
-### 4. Presentation Layer (UI/UX)
-- **Components**: React components
-- **Hooks**: Custom React hooks
-- **Pages**: Next.js pages
+### 3. Infrastructure Layer
+- **หน้าที่**: จัดการ Data Access และ External Services
+- **ไฟล์**: `src/infrastructure/`
+- **ประกอบด้วย**: Repositories, External API calls
 
-## ข้อดีของโครงสร้างใหม่
+### 4. Presentation Layer
+- **หน้าที่**: จัดการ UI/UX และ User Interaction
+- **ไฟล์**: `src/presentation/`
+- **ประกอบด้วย**: React Components, Custom Hooks
 
-### 1. Separation of Concerns
-- Business logic แยกจาก UI logic
-- Data access แยกจาก business rules
-- ทดสอบแต่ละ layer ได้แยกกัน
+## การทำงานของระบบ
 
-### 2. Maintainability
-- เปลี่ยน UI โดยไม่กระทบ business logic
-- เปลี่ยน database โดยไม่กระทบ business rules
-- เพิ่ม feature ใหม่ได้ง่าย
+### สำหรับลูกค้า
+1. **เลือกเมนู**: ลูกค้าเลือกเครื่องดื่มและท็อปปิ้ง
+2. **ตะกร้าสินค้า**: ตรวจสอบและแก้ไขรายการ
+3. **ชำระเงิน**: เลือกวิธีชำระเงินที่ปลอดภัย
+4. **รับ QR Code**: รับ QR Code สำหรับรับเครื่องดื่ม
 
-### 3. Testability
-- Unit test business logic ได้ง่าย
-- Mock dependencies ได้ง่าย
-- Integration test แต่ละ layer
+### สำหรับบาริสต้า
+1. **ดูออเดอร์**: ดูรายการออเดอร์ที่รอดำเนินการ
+2. **จัดการสถานะ**: อัพเดทสถานะการเตรียมเครื่องดื่ม
+3. **ติดตามความคืบหน้า**: ดูสถิติและความคืบหน้าการทำงาน
 
-### 4. Scalability
-- เพิ่ม feature ใหม่โดยไม่กระทบ code เดิม
-- แยก team ทำงานได้ตาม layer
-- Reuse business logic ได้
+## เทคโนโลยีที่ใช้
 
-## การใช้งาน
-
-### 1. เพิ่ม Use Case ใหม่
-```typescript
-// src/application/use-cases/order/RemoveItemFromCartUseCase.ts
-export class RemoveItemFromCartUseCase {
-  execute(request: RemoveItemFromCartRequest): RemoveItemFromCartResponse {
-    // Business logic here
-  }
-}
-```
-
-### 2. เพิ่ม Repository ใหม่
-```typescript
-// src/infrastructure/repositories/OrderRepository.ts
-export interface IOrderRepository {
-  save(order: Order): Promise<void>;
-  findById(id: string): Promise<Order | null>;
-}
-```
-
-### 3. เพิ่ม Component ใหม่
-```typescript
-// src/presentation/components/customer/OrderHistory.tsx
-export const OrderHistory: React.FC<OrderHistoryProps> = ({ orders }) => {
-  // UI logic here
-};
-```
-
-## Migration Guide
-
-### จากโครงสร้างเดิม
-1. ย้าย business logic ไป Domain Layer
-2. แยก use cases ไป Application Layer
-3. ย้าย data access ไป Infrastructure Layer
-4. ปรับ components ให้ใช้ hooks ใหม่
-
-### การทดสอบ
-1. Unit test domain entities และ value objects
-2. Unit test use cases
-3. Integration test repositories
-4. Component test UI components
+- **Frontend**: Next.js 15, React 18, TypeScript
+- **UI Framework**: Ant Design, Tailwind CSS
+- **State Management**: React Hooks, Local State
+- **Icons**: Lucide React, Ant Design Icons
+- **Architecture**: Clean Architecture, Domain-Driven Design

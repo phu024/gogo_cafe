@@ -30,12 +30,12 @@ export default function LandingPage() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-yellow-50 via-white to-blue-50 p-6">
       <div className="w-full max-w-xl bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
         <h1 className="text-3xl font-bold mb-6 text-center"><span style={{color:"var(--gogo-primary)"}}>GOGO</span> <span style={{color:"var(--gogo-secondary)"}}>CAFE</span></h1>
-        <p className="text-center text-gray-600 mb-4">เลือกผู้ใช้เพื่อจำลองการเข้าสู่ระบบ (mock)</p>
+        <p className="text-center text-gray-600 mb-4">ยินดีต้อนรับสู่ระบบสั่งซื้อเครื่องดื่มออนไลน์</p>
 
         <div className="flex items-center gap-3">
           <Select
             className="w-full"
-            placeholder="-- เลือกผู้ใช้ --"
+            placeholder="-- เลือกผู้ใช้เพื่อเข้าสู่ระบบ --"
             value={selectedUserId ?? undefined}
             onChange={(value) => setSelectedUserId(value)}
             options={users.map(u => ({
@@ -57,7 +57,7 @@ export default function LandingPage() {
         </div>
 
         <div className="mt-6 text-sm text-gray-400 text-center">
-          <p>หมายเหตุ: mock-login สำหรับการพัฒนาเท่านั้น</p>
+          <p>หมายเหตุ: ระบบจำลองการเข้าสู่ระบบสำหรับการพัฒนาเท่านั้น</p>
         </div>
       </div>
     </div>

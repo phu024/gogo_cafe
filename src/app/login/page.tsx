@@ -31,7 +31,8 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-yellow-50 via-white to-blue-50 p-6">
       <div className="w-full max-w-xl bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
-        <h1 className="text-3xl font-bold mb-6 text-center"><span style={{color:"var(--gogo-primary)"}}>GOGO</span> <span style={{color:"var(--gogo-secondary)"}}>Login</span></h1>
+        <h1 className="text-3xl font-bold mb-6 text-center"><span style={{color:"var(--gogo-primary)"}}>GOGO</span> <span style={{color:"var(--gogo-secondary)"}}>CAFE</span></h1>
+        <h2 className="text-xl font-semibold mb-6 text-center text-gray-700">เข้าสู่ระบบ</h2>
         <div className="flex gap-2 flex-wrap justify-center mb-6">
           <Button onClick={() => handleRoleFilter('ALL')} type={roleFilter==='ALL' ? 'primary' : 'default'} className="rounded-full text-sm border">ทั้งหมด</Button>
           {roles.map(r => (
@@ -43,13 +44,13 @@ export default function LoginPage() {
             <li key={u.id} className="py-4 flex items-center justify-between">
               <div>
                 <p className="font-medium text-gray-800">{u.first_name} {u.last_name}</p>
-                <p className="text-xs text-gray-500">Role: {u.role_id.name}</p>
+                <p className="text-xs text-gray-500">ตำแหน่ง: {u.role_id.name}</p>
               </div>
-              <Button disabled={isPending} onClick={() => handleLoginClick(u.id)} type="primary" className="rounded-md bg-yellow-500 hover:bg-yellow-600 text-white text-sm disabled:opacity-50">เลือก</Button>
+              <Button disabled={isPending} onClick={() => handleLoginClick(u.id)} type="primary" className="rounded-md bg-yellow-500 hover:bg-yellow-600 text-white text-sm disabled:opacity-50">เข้าสู่ระบบ</Button>
             </li>
           ))}
         </ul>
-        <p className="text-center text-xs text-gray-400">Mock login เลือก user เพื่อจำลอง session (cookie)</p>
+        <p className="text-center text-xs text-gray-400">ระบบจำลองการเข้าสู่ระบบ - เลือกผู้ใช้เพื่อจำลองเซสชัน (cookie)</p>
       </div>
     </div>
   );

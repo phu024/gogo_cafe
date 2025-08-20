@@ -1,34 +1,29 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import type { MenuItem, Topping } from '@/types';
-import { calcItemTotalPrice } from '@/shared/utils/utils';
 
-export function useAddToCartModalLogic(isVisible: boolean, selectedItem: MenuItem | null, selectedToppings: Topping[], quantity: number) {
-  const [qtyError, setQtyError] = useState<string | null>(null);
+export function useAddToCartModalLogic(selectedItem: MenuItem | null, selectedToppings: Topping[], quantity: number) {
+  const [qtyError, setQtyError] = useState<string | undefined>(undefined);
   
-
-  useEffect(() => {
-    if (!isVisible) setQtyError(null);
-  }, [isVisible]);
-
+  const totalPrice = useMemo(() => {
+    if (!selectedItem) return 0;
+    const basePrice = selectedItem.base_price * quantity;
+    const toppingsPrice = selectedToppings.reduce((sum, topping) => sum + topping.price, 0) * quantity;
+    return basePrice + toppingsPrice;
+  }, [selectedItem, selectedToppings, quantity]);
 
   const validateQty = useCallback((val: number) => {
     if (!Number.isFinite(val) || val < 1) {
       setQtyError('จำนวนต้องเป็นตัวเลขตั้งแต่ 1 ขึ้นไป');
       return false;
     }
-    setQtyError(null);
+    setQtyError(undefined);
     return true;
   }, []);
-
-  const getTotalPrice = useCallback(() => {
-    if (!selectedItem) return 0;
-    return calcItemTotalPrice(selectedItem, selectedToppings, quantity);
-  }, [selectedItem, selectedToppings, quantity]);
 
   return {
     qtyError,
     setQtyError,
     validateQty,
-    getTotalPrice,
+    totalPrice,
   };
-}
+};
