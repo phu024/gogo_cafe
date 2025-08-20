@@ -80,7 +80,7 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
         <Header totalItems={0} />
         <Card className="shadow-lg">
           <div className="text-center py-12">
-            <ShoppingCartOutlined className="text-6xl text-gray-300 mb-4" />
+            {/* <ShoppingCartOutlined className="text-6xl text-gray-300 mb-4" /> */}
             <Title level={3} className="text-gray-500 mb-2">
               ตะกร้าสินค้าว่าง
             </Title>
@@ -108,7 +108,7 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
       <div className="flex items-center justify-between">
         <div>
           <Title level={2} className="mb-2 text-gray-800">
-            <ShoppingOutlined className="mr-2 text-[var(--gogo-primary)]" />
+            {/* <ShoppingOutlined className="mr-2 text-[var(--gogo-primary)]" /> */}
             ตะกร้าสินค้า
           </Title>
           <Text className="text-gray-600">
@@ -142,7 +142,7 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
             ฿{formatCurrencyTH(item.total_price)}
           </Title>
           <Text className="text-gray-400 text-xs">
-            ราคารวม ({item.quantity} ชิ้น)
+            ราคารวม ({item.quantity} รายการ)
           </Text>
         </div>
       </div>
@@ -176,7 +176,7 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
             </div>
           )}
           <div className="flex justify-between border-t pt-1 mt-1">
-            <Text className="text-gray-700 font-medium">ราคาต่อชิ้น:</Text>
+            <Text className="text-gray-700 font-medium">ราคาต่อรายการ:</Text>
             <Text strong className="text-blue-600">฿{formatCurrencyTH(item.total_price / item.quantity)}</Text>
           </div>
         </div>
@@ -200,7 +200,7 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
             <Text className="text-gray-600 text-sm">จำนวน:</Text>
             <div className="bg-blue-50 rounded px-2 py-1">
               <Text strong className="text-sm text-blue-600">
-                {item.quantity} ชิ้น
+                {item.quantity} รายการ
               </Text>
             </div>
           </div>
@@ -253,8 +253,8 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
       <div className="space-y-3">
         <div className="flex justify-between items-center">
           <Text className="text-gray-600 text-sm">จำนวนรายการ</Text>
-          <div className="text-2xl font-bold text-blue-600">
-            {totalItems} ชิ้น
+          <div className="text-xl font-bold">
+            {totalItems} รายการ
           </div>
         </div>
         <div className="flex justify-between items-center">

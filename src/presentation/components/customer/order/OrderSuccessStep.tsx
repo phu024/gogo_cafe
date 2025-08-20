@@ -96,7 +96,7 @@ const OrderSuccessStep: React.FC<OrderSuccessStepProps> = ({
           <div className="flex items-center justify-between">
             <div>
               <Title level={2} className="mb-2 text-gray-800">
-                <CheckCircleOutlined className="mr-2 text-[var(--gogo-primary)]" />
+                {/* <CheckCircleOutlined className="mr-2 text-[var(--gogo-primary)]" /> */}
                 สั่งซื้อสำเร็จ!
               </Title>
               <Text className="text-gray-600">
@@ -219,9 +219,9 @@ const OrderSuccessStep: React.FC<OrderSuccessStepProps> = ({
               </div>
               <div className="flex justify-between items-center p-2 bg-gray-50 rounded">
                 <Text className="text-gray-600">จำนวนรายการ:</Text>
-                <Text strong>{orderDetails.items.reduce((sum, item) => sum + item.quantity, 0)} ชิ้น</Text>
+                <Text strong>{orderDetails.items.reduce((sum, item) => sum + item.quantity, 0)} รายการ</Text>
               </div>
-              <div className="flex justify-between items-center p-2 bg-green-50 rounded border border-green-200">
+              <div className="flex justify-between items-center p-2 bg-gray-50 rounded ">
                 <Text className="text-gray-600">ยอดรวม:</Text>
                 <Text strong className="text-xl text-green-600">
                   ฿{formatCurrencyTH(orderDetails.totalAmount)}

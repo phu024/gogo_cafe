@@ -31,21 +31,21 @@ const OrderPaymentStep: React.FC<OrderPaymentStepProps> = ({
   const paymentMethods = [
     {
       key: "credit",
-      icon: <CreditCardOutlined className="text-2xl text-blue-600" />,
+      icon: <CreditCardOutlined className="text-2xl" />,
       label: "บัตรเครดิต/เดบิต",
       description: "ชำระผ่านบัตร Visa, Mastercard, JCB",
       onClick: onPayment,
     },
     {
       key: "qr",
-      icon: <QrcodeOutlined className="text-2xl text-green-600" />,
+      icon: <QrcodeOutlined className="text-2xl" />,
       label: "โอนเงินผ่าน QR Code",
       description: "สแกน QR Code เพื่อโอนเงินผ่านธนาคาร",
       onClick: onPayment,
     },
     {
       key: "bankapp",
-      icon: <DollarOutlined className="text-2xl text-purple-600" />,
+      icon: <DollarOutlined className="text-2xl" />,
       label: "ชำระผ่าน App ธนาคาร",
       description: "โอนเงินผ่าน Mobile Banking App",
       onClick: onPayment,
@@ -60,11 +60,11 @@ const OrderPaymentStep: React.FC<OrderPaymentStepProps> = ({
           <div className="flex items-center justify-between">
             <div>
               <Title level={2} className="mb-2 text-gray-800">
-                <CreditCardOutlined className="mr-2 text-[var(--gogo-primary)]" />
+                {/* <CreditCardOutlined className="mr-2 text-[var(--gogo-primary)]" /> */}
                 ยืนยันการสั่งซื้อ
               </Title>
               <Text className="text-gray-600">
-                ตรวจสอบรายการและเลือกวิธีชำระเงินที่ปลอดภัย
+                กรุณาตรวจสอบรายการและเลือกวิธีชำระเงิน
               </Text>
             </div>
             <div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg bg-white">
@@ -129,7 +129,7 @@ const OrderPaymentStep: React.FC<OrderPaymentStepProps> = ({
               {paymentMethods.map((method) => (
                 <div
                   key={method.key}
-                  className="border border-gray-200 rounded-lg p-4 transition-all duration-300 cursor-pointer hover:border-green-400 hover:shadow-md"
+                  className="border border-gray-200 rounded-lg p-4 transition-all duration-300 cursor-pointer hover:border-blue-400 hover:shadow-md"
                   onClick={method.onClick}
                 >
                   <div className="flex items-center gap-3">

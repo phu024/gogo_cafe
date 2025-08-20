@@ -150,7 +150,7 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
               value={quantity}
               onChange={(value) => onQuantityChange(value || 1)}
               className="w-1/4"
-              addonBefore="ชิ้น"
+              addonBefore="รายการ"
             />
           </div>
 
