@@ -11,7 +11,7 @@ import {
   FileTextOutlined,
 } from "@ant-design/icons";
 import { CartItem, Topping } from "@/types";
-import { formatCurrencyTH } from '@/shared/utils/utils';
+import { formatCurrencyTH, calcItemTotalPrice } from '@/shared/utils/utils';
 import { useOrderCartLogic } from '@/presentation/hooks/legacy/useCustomerOrderCart';
 import AddToCartModal from './AddToCartModal';
 
@@ -56,12 +56,15 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
 
   const handleSaveEdit = () => {
     if (editingItem) {
+      const newTotalPrice = calcItemTotalPrice(editingItem.menu_item, editToppings, editQuantity);
+      
       onEditItem({
         ...editingItem,
         quantity: editQuantity,
         sugar_level: editSugarLevel,
         notes: editNotes,
         toppings: editToppings,
+        total_price: newTotalPrice,
       });
     }
     setEditModalVisible(false);
@@ -126,118 +129,90 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
 
   // Cart item component
   const CartItemComponent = ({ item }: { item: CartItem }) => (
-    <div className="border-b border-gray-100 pb-4 last:border-b-0">
+    <div className="border-b border-gray-300 pb-4 mb-4 last:border-b-0">
       {/* Item Header */}
-      <div className="flex justify-between items-start mb-3">
-        <div className="flex-1 min-w-0">
-          <Title level={4} className="mb-1 text-gray-800 truncate">
-            {item.menu_item.name}
-          </Title>
-          <Text className="text-gray-600 text-sm">
-            {item.menu_item.description}
-          </Text>
-        </div>
-        <div className="text-right ml-4">
-          <Title level={4} className="text-[var(--gogo-primary)] mb-0">
-            ฿{formatCurrencyTH(item.total_price)}
-          </Title>
-          <Text className="text-gray-400 text-xs">
-            ราคารวม ({item.quantity} รายการ)
-          </Text>
-        </div>
+      <div className="mb-3">
+        <Title level={4} className="mb-0">
+          {item.menu_item.name}
+        </Title>
       </div>
 
-      {/* Price Breakdown */}
-      <div className="bg-gray-50 rounded-lg p-3 mb-3">
-        <div className="space-y-1 text-sm">
-          <div className="flex justify-between">
-            <Text className="text-gray-600">ราคาเมนู:</Text>
-            <Text>฿{formatCurrencyTH(item.menu_item.base_price)}</Text>
-          </div>
-          {item.toppings.length > 0 && (
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                <Text className="text-gray-600">ท็อปปิ้ง:</Text>
-                <div className="flex flex-wrap gap-1">
-                  {item.toppings.map((topping) => (
-                    <Tag key={topping.id} className="text-xs">
-                      {topping.name} (+฿{formatCurrencyTH(topping.price)})
-                    </Tag>
-                  ))}
-                </div>
-              </div>
+      {/* Item Details */}
+      <div className="space-y-2 text-sm mb-3">
+        <div className="flex justify-between">
+          <Text>ราคาเครื่องดื่ม</Text>
+          <Text>฿{formatCurrencyTH(item.menu_item.base_price)}</Text>
+        </div>
+        
+        {item.toppings.length > 0 && (
+          <div>
+            <div className="flex justify-between mb-1">
+              <Text>ท็อปปิ้ง</Text>
               <Text>฿{formatCurrencyTH(item.toppings.reduce((sum, t) => sum + t.price, 0))}</Text>
             </div>
-          )}
-          {item.sugar_level !== 50 && (
-            <div className="flex justify-between">
-              <Text className="text-gray-600">ความหวาน:</Text>
-              <Text>{item.sugar_level}%</Text>
+            <div className="flex flex-wrap gap-1">
+              {item.toppings.map((topping) => (
+                <Tag key={topping.id} className="text-xs">
+                  {topping.name} (+฿{formatCurrencyTH(topping.price)})
+                </Tag>
+              ))}
             </div>
-          )}
-          <div className="flex justify-between border-t pt-1 mt-1">
-            <Text className="text-gray-700 font-medium">ราคาต่อรายการ:</Text>
-            <Text strong className="text-blue-600">฿{formatCurrencyTH(item.total_price / item.quantity)}</Text>
           </div>
+        )}
+        
+        {item.sugar_level !== 50 && (
+          <div className="flex justify-between">
+            <Text>ความหวาน</Text>
+            <Text>{item.sugar_level}%</Text>
+          </div>
+        )}
+        
+        <div className="flex justify-between">
+          <Text className="font-medium">ราคาต่อรายการ</Text>
+          <Text className="font-medium">฿{formatCurrencyTH(item.total_price / item.quantity)}</Text>
+        </div>
+        
+        <div className="flex justify-between">
+          <Text>จำนวน</Text>
+          <Text>{item.quantity} รายการ</Text>
+        </div>
+        
+        <div className="flex justify-between border-t border-gray-100 pt-2">
+          <Text className="font-medium text-lg">ราคารวม</Text>
+          <Text className="font-medium text-lg">฿{formatCurrencyTH(item.total_price)}</Text>
         </div>
       </div>
 
       {/* Notes */}
       {item.notes && (
-        <div className="space-y-2 mb-4">
-          <div className="flex items-center gap-2">
-            <FileTextOutlined className="text-blue-500" />
-            <Text strong className="text-sm text-gray-700">หมายเหตุ:</Text>
+        <div className="mb-3">
+          <div className="flex items-start gap-2">
+            <FileTextOutlined className="text-gray-500 mt-0.5" />
+            <Text className="text-sm font-medium">หมายเหตุ:</Text>
             <Text className="text-sm text-gray-600">{item.notes}</Text>
           </div>
         </div>
       )}
 
-      {/* Item Footer */}
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Text className="text-gray-600 text-sm">จำนวน:</Text>
-            <div className="bg-blue-50 rounded px-2 py-1">
-              <Text strong className="text-sm text-blue-600">
-                {item.quantity} รายการ
-              </Text>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Text className="text-gray-600 text-sm">ราคารวม:</Text>
-            <div className="bg-green-50 rounded px-2 py-1">
-              <Text strong className="text-sm text-green-600">
-                ฿{formatCurrencyTH(item.total_price)}
-              </Text>
-            </div>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex gap-2">
-          <Button
-            type="primary"
-            icon={<EditOutlined />}
-            className="bg-gradient-to-r from-orange-500 to-yellow-500 border-0"
-            size="small"
-            title="แก้ไขรายการ"
-            onClick={() => handleEditItem(item)}
-          >
-            แก้ไข
-          </Button>
-          <Button
-            type="primary"
-            danger
-            icon={<DeleteOutlined />}
-            size="small"
-            className="bg-gradient-to-r from-red-500 to-pink-500 border-0"
-            title="ลบรายการ"
-            onClick={() => onRemoveItem(item.id.toString())}
-          >
-            ลบ
-          </Button>
-        </div>
+      {/* Action Buttons */}
+      <div className="flex justify-end gap-2">
+        <Button
+          type="default"
+          icon={<EditOutlined />}
+          size="small"
+          onClick={() => handleEditItem(item)}
+        >
+          แก้ไข
+        </Button>
+        <Button
+          type="primary"
+          danger
+          icon={<DeleteOutlined />}
+          size="small"
+          onClick={() => onRemoveItem(item.id.toString())}
+        >
+          ลบ
+        </Button>
       </div>
     </div>
   );
@@ -260,7 +235,7 @@ const OrderCartStep: React.FC<OrderCartStepProps> = ({
         <div className="flex justify-between items-center">
           <Text className="text-gray-600 text-sm">ยอดรวมทั้งหมด</Text>
           <div className="text-right">
-            <div className="text-3xl font-bold text-[var(--gogo-primary)]">
+            <div className="text-3xl font-bold text-blue-600">
               ฿{formatCurrencyTH(totalAmount)}
             </div>
             {/* <Text className="text-gray-400 text-xs">
